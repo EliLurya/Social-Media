@@ -1,0 +1,18 @@
+PORT=
+URL_FRONTED = http://localhost:3000
+
+//from mongodb atlas
+DB_URI=mongodb+srv://your-username:your-password@your-cluster-url/socelMadie?retryWrites=true&w=majority
+
+//jsonwebtjoken
+your-secret-key=
+
+//Send email from
+EMAIL_USERNAME=
+
+//From https://cloud.google.com
+GMAIL_CLIENT_SECRET=
+GOOGLE_CLIENT_ID=
+
+//From https://developers.google.com
+GMAIL_REFRESH_TOKEN=

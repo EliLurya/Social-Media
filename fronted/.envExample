@@ -1,0 +1,6 @@
+//Base URL
+VITE_BASE_URL=
+
+//Client ID from Google - https://cloud.google.com
+
+VITE_CLIENT_ID=

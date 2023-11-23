@@ -1,0 +1,61 @@
+@localHost = http://localhost:4000/api/v1/
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGQ2NDM4N2MzMjQwMWIxY2ZjNWFmNDMiLCJyb2xlIjoidXNlciIsImlhdCI6MTY5MTc2MzYxNCwiZXhwIjoxNjkxNzkyNDE0fQ.dR5IK_Sm1571occIyMtSx8KWZMmrl-qTb03DPJe3qV0
+
+### Sign Up Request ###
+POST {{localHost}}users/signUp
+Content-Type: application/json
+
+{
+    "email": "tes11ts1@example.com",
+    "password": "asdD1@asdasdasdass",
+    "userName": "1ta",
+    "role":"user"
+}
+### Send Request ###
+
+### Sign In Request ###
+POST {{localHost}}users/signIn
+Content-Type: application/json
+
+{
+    "email": "tes11ts1@example.com",
+    "password": "asdD1@asdasdasdass"
+}
+### Send Request ###
+
+### Get all users ###
+GET {{localHost}}manager/users/getAllUsers
+Authorization: Bearer {{token}}
+### Send Request ###
+
+### Get user by ID ###
+GET {{localHost}}manager/users/getUser/64d51a7f1fc964f430aa014b
+Authorization: Bearer {{token}}
+### Send Request ### 
+
+### Create post###
+POST {{localHost}}user/action/newPost
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{"post":"this is my post"}
+### Send Request###
+
+### Get posts of user###
+GET {{localHost}}user/action/posts
+Authorization: Bearer {{token}}
+### Send Request###
+
+### Update post(user)###
+PUT {{localHost}}user/action/updatePost/64d644d9c32401b1cfc5af47
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{"post":"change it1"}
+### Send Request###
+
+### Delete post(user)###
+
+DELETE  {{localHost}}user/action/deletePost/64d647c7c32401b1cfc5af59
+Authorization: Bearer {{token}}
+### Send Request###

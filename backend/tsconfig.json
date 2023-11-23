@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES2016", // or a higher version
+    "module": "CommonJS", // or other module system you prefer
+    "outDir": "./dist", // directory for compiled output
+    "rootDir": "./", // directory where your TypeScript files are located
+    "esModuleInterop": true // enable ES module interop
+  },
+  "include": ["src/**/*.ts", "src/types/express/index.d.ts"],
+  "exclude": ["node_modules"],
+  "files": ["src/types/express/index.d.ts"]
+}
