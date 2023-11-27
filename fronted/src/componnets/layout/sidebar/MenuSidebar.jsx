@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
   Box,
@@ -14,7 +14,7 @@ import {
 import { menuItems } from "./menuItems";
 import useResponsive from "../../../utils/useResponsive";
 import logo from "../../../assets/images/picsvg_download22.svg";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const MenuSideBar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -66,7 +66,6 @@ const MenuSideBar = () => {
       >
         <Box
           sx={{
-            bgcolor: "#fffff",
             height: 1000,
           }}
           role="presentation"
@@ -82,26 +81,34 @@ const MenuSideBar = () => {
             {menuItems.map((item, index) => (
               <ListItem key={index} disablePadding>
                 <ListItemButton
-                  component="a"
-                  href={item.href}
+                  component={Link}
+                  to={item.href}
                   sx={{
                     "&:hover": {
-                      backgroundColor: "#e0d3e1",
-                      "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-                        color: "#47126B",
+                      backgroundColor: (theme) =>
+                        theme.palette.primary.AuxiliaryColor,
+                      color: "primary", // Set text color on hover for the whole ListItemButton
+                      // Apply hover styles to the icon specifically
+                      "& .MuiListItemIcon-root": {
+                        color: "primary", // Icon color on hover
                       },
                     },
                     ...(isActive(item.href) && {
-                      position: "relative", // Needed for the line's absolute positioning
+                      backgroundColor: (theme) =>
+                        theme.palette.primary.AuxiliaryColor,
+                      color: "primary",
+                      "& .MuiListItemIcon-root": {
+                        color: "primary", // Icon color on hover
+                      },
+                      position: "relative",
                       "&::before": {
-                        // CSS for the line
                         content: '""',
                         position: "absolute",
                         left: 3,
                         top: "50%",
                         width: "4px",
                         height: "80%",
-                        backgroundColor: "#47126B", // Line color
+                        backgroundColor: "primary",
                         transform: "translateY(-50%)",
                       },
                     }),

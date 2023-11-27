@@ -57,7 +57,6 @@ export default function AuthProvider({ children }) {
       }
       setSignInSuccessful(true);
 
-      // setToken(response.data);
     } catch (error) {
       console.error(error);
     }

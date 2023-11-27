@@ -3,6 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import { Box, Divider, Typography } from "@mui/material";
 import { useState } from "react";
 import ErrorMessage from "../common/ErrorMessage";
+import { getFlexStyles } from "../common/style/CommonStyles";
 
 const GoogleSign = () => {
   const { handleLoginSuccessGoogle } = useAuth(); // Using handleLoginSuccessGoogle from AuthContext
@@ -14,16 +15,9 @@ const GoogleSign = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        my: 2, // Margin for top and bottom
-      }}
-    >
+    <Box sx={getFlexStyles("column", { my: 2 })}>
       {/* Divider to separate Google login from other forms */}
-      <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
+      <Box sx={getFlexStyles("none", { width: "100%" })}>
         <Divider sx={{ flexGrow: 1 }} />
         <Typography variant="caption" sx={{ mx: 1, whiteSpace: "nowrap" }}>
           OR
@@ -41,8 +35,8 @@ const GoogleSign = () => {
       >
         <GoogleLogin
           shape="circle"
-          onSuccess={handleLoginSuccessGoogle} 
-          onError={handleLoginError} 
+          onSuccess={handleLoginSuccessGoogle}
+          onError={handleLoginError}
         />
         {/* Display error message if there is an error */}
         {error && <ErrorMessage message={error} />}

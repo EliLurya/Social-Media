@@ -16,7 +16,7 @@ router.post(
     try {
       // Create a new instance of CommentModel and set its properties
       const newComment = new CommentModel({
-        userId: req.user.userId, // Assuming userId is a valid ObjectId
+        userId: req.user.userId, 
         comment,
         postId,
         parentComment: parentCommentId || null,

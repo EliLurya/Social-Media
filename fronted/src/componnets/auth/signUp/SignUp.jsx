@@ -12,6 +12,8 @@ import { useEffect, useState } from "react";
 import GoogleSign from "../../auth/GoogleSign";
 import ShowLogo from "../../common/ShowLogo";
 import useResponsive from "../../../utils/useResponsive";
+import LogoTop from "../LogoTop";
+import { getFlexStyles } from "../../common/style/CommonStyles";
 
 // Schema for form validation using Yup
 const schema = yup.object({
@@ -94,18 +96,16 @@ const SignUp = () => {
     <>
       {!isLoading ? (
         <Box>
+          <LogoTop></LogoTop>
           <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              mt: "4rem",
-              alignItems: "center",
-            }}
+            sx={getFlexStyles("column", {
+              mt: "1rem",
+            })}
           >
             <Typography
               variant="h4"
               sx={{
-                color: "#e0d3e1",
+                color: (theme) => theme.palette.primary.AuxiliaryColor,
                 fontWeight: "bold",
                 textDecoration: "underline",
               }}
@@ -164,7 +164,7 @@ const SignUp = () => {
               <Link
                 underline="none"
                 href="/signin"
-                color="#47126B"
+                color="primary"
                 fontWeight="bold"
               >
                 {" "}

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import * as userService from "../../../../services/userService";
 import useResponsive from "../../../../utils/useResponsive";
+import { getFlexStyles } from "../../../common/style/CommonStyles";
 
 // Schema for form validation using Yup
 const schema = yup.object({
@@ -53,17 +54,14 @@ const ForgotPassword = () => {
       {!userMessage ? (
         // Form layout for resetting the password
         <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
+          sx={getFlexStyles("column", {
             mt: "4rem",
-            alignItems: "center",
-          }}
+          })}
         >
           <Typography
             variant="h4"
             sx={{
-              color: "#e0d3e1",
+              color: (theme) => theme.palette.primary.AuxiliaryColor,
               fontWeight: "bold",
               textDecoration: "underline",
             }}
@@ -108,10 +106,10 @@ const ForgotPassword = () => {
                   backgroundColor: "transparent",
                   ":hover": {
                     backgroundColor: "transparent",
-                    borderColor: "#973AA8",
+                    borderColor: (theme) => theme.palette.secondary.main,
                   },
-                  color: "#973AA8",
-                  borderColor: "#973AA8",
+                  color: (theme) => theme.palette.secondary.main,
+                  borderColor: (theme) => theme.palette.primary.main,
                 }}
               >
                 Cancel
@@ -121,13 +119,10 @@ const ForgotPassword = () => {
         </Box>
       ) : (
         // Message layout shown after successfully requesting a password reset
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
+        <Box          
+          sx={getFlexStyles("column", {
             mt: "4rem",
-            alignItems: "center",
-          }}
+          })}
         >
           <Typography
             variant="h6"

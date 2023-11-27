@@ -1,12 +1,8 @@
-import {
-  Box,
-  Button,
-  CardContent,
-  Typography,
-} from "@mui/material";
+import { Box, Button, CardContent, Typography } from "@mui/material";
 import { useContext } from "react";
 import { CountextData } from "../../../context/ContextData"; // Correct the filename
 import useResponsive from "../../../utils/useResponsive";
+import { getFlexStyles } from "../../common/style/CommonStyles";
 
 const RecentTrend = () => {
   // useResponsive hook to check for larger screens
@@ -17,12 +13,9 @@ const RecentTrend = () => {
 
   return (
     <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
+      sx={getFlexStyles("column", {
         left: 150, // Position the component
-      }}
+      })}
     >
       {/* Heading for Recent Trends */}
       <Typography variant="h6" fontWeight={100} mt={3}>
@@ -69,7 +62,7 @@ const RecentTrend = () => {
                       ":hover": {
                         backgroundColor: "transparent",
                       },
-                      color: "#973AA8",
+                      color: "secondary",
                     }}
                     size="small"
                   >

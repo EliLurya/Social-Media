@@ -1,6 +1,6 @@
 import { Box, Button, CardMedia, Modal } from "@mui/material";
 import useResponsive from "../../../../utils/useResponsive";
-
+import { getFlexStyles } from "../../../common/style/CommonStyles";
 // ShowImage component for displaying an image and handling image modal
 const ShowImage = ({
   image, // Image URL
@@ -18,11 +18,9 @@ const ShowImage = ({
 
   return (
     <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
+      sx={getFlexStyles("none", {
         justifyContent: "center",
-      }}
+      })}
     >
       {/* Button to open the modal */}
       <Button
@@ -50,14 +48,12 @@ const ShowImage = ({
       {/* Modal for enlarged image view */}
       <Modal open={isImageModalOpen} onClose={closeImageModal}>
         <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
+          sx={getFlexStyles("none", {
             justifyContent: "center",
             position: "fixed",
             width: "100%",
             height: "100%",
-          }}
+          })}         
           onClick={closeImageModal} // Close the modal when clicking outside the image
         >
           <img

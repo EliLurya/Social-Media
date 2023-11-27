@@ -3,13 +3,15 @@ import { MoreVert } from "@mui/icons-material";
 import {
   Avatar,
   Box,
-  Card,
   CardContent,
   CardHeader,
+  Divider,
   IconButton,
   Typography,
 } from "@mui/material";
 import Link from "@mui/material/Link";
+import { Link as RouterLink } from "react-router-dom";
+
 import { useContext } from "react";
 import { CountextData } from "../../../../../context/ContextData";
 import Icons from "../Icons";
@@ -47,16 +49,29 @@ export const Post = () => {
     setImageModalOpen(true);
   };
 
-  const closeImageModal = () => {
+  const closeImageModal = (image) => {
+     image.preventDefault();
+     image.stopPropagation(); 
     setImageModalOpen(false);
   };
 
   return (
     <>
+      <Divider
+        sx={{
+          bgcolor: (theme) => theme.palette.text.secondary,
+          borderBottomWidth: "1.5px",
+          mr: "1.1rem",
+        }}
+      ></Divider>
       {postDetails.map((post, index) => (
-        <Card
+        <Box
           key={index}
-          sx={{ marginRight: 2, marginLeft: 0, marginBottom: 5 }}
+          sx={{
+            margin: "10px 1.1rem 1px 0.1rem",
+            // border: "0.1px solid #EEE5F1",
+            borderRadius: 1,
+          }}
         >
           <CardHeader
             avatar={
@@ -81,7 +96,8 @@ export const Post = () => {
           <Box component="span">
             <Link
               key={index}
-              href={`post/${post.userName}/${post.id}`}
+              component={RouterLink}
+              to={`/post/${post.userName}/${post.id}`}
               underline="none"
             >
               <CardContent>
@@ -105,7 +121,13 @@ export const Post = () => {
               handleShare(title, text, post.userName, post.id)
             }
           />
-        </Card>
+          <Divider
+            sx={{
+              bgcolor: (theme) => theme.palette.text.secondary,
+              borderBottomWidth: "1.5px",              
+            }}
+          ></Divider>
+        </Box>
       ))}
     </>
   );

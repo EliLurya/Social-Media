@@ -30,7 +30,7 @@ const SignRoutes = () => {
             element={<ForgotPasswordPage />}
           />
           <Route path="/reset-password/:token" element={<NewPasswordPage />} />
-          <Route path="/*" element={<SignInPage />} />
+          <Route path="/*" element={<Navigate to="/signin" />} />
         </Routes>
       </Suspense>
     </GoogleOAuthProvider>

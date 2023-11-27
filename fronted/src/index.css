@@ -3,3 +3,16 @@
   padding: 0;
   font-family: "Roboto", "Arial Narrow";
 }
+/* 
+The id="g_a11y_announcement" s an accessibility feature added by Material-UI (MUI) to enhance screen reader support.
+ It's used for announcing certain actions to users with visual impairments. But it cause to problem
+ in menuSideBar*/
+#g_a11y_announcement {
+  position: absolute;
+  /* left: -10000px is a common technique used to visually hide elements while keeping them accessible. */
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

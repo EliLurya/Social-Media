@@ -2,38 +2,57 @@ import { Box, Container, Stack } from "@mui/material";
 import RigthBar from "./componnets/layout/rightBar/RigthBar";
 import Sidebar from "./componnets/layout/sidebar/Sidebar";
 import Navbar from "./componnets/layout/navbar/Navbar";
-import {  useState } from "react";
+import { useState } from "react";
 import AllRoutes from "./routes/AllRoutes";
-import SignRoutes from "./routes/signRoutes";
+import SignRoutes from "./routes/SignRoutes";
 import { useAuth } from "./context/AuthContext";
-import theme from "./theme/index";
+import { lightTheme, darkTheme } from "./theme/index";
+
 import { ThemeProvider } from "@mui/material/styles";
 function App() {
   const [openSearch, setOpenSearch] = useState(false);
   const { signInSuccessful } = useAuth();
+  const [darkMode, setDarkMode] = useState(true);
 
+  // Function to toggle dark mode
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
   return (
     <Box>
-      <ThemeProvider theme={theme}>
-        <Navbar className="a" openSearch={openSearch}></Navbar>
+      <Box>
         {!signInSuccessful ? (
-          <Container sx={{ maxWidth: "xs" }} className="background-container">
-            <SignRoutes></SignRoutes>
-          </Container>
+          <ThemeProvider theme={lightTheme}>
+            <Navbar className="a" openSearch={openSearch}></Navbar>
+
+            <Container sx={{ maxWidth: "xs" }} className="background-container">
+              <SignRoutes></SignRoutes>
+            </Container>
+          </ThemeProvider>
         ) : (
-          <Box>
-            <Stack
-              direction={"row"}
-              spacing={2}
-              justifyContent={"space-between"}
+          <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+            <Navbar className="a" openSearch={openSearch}></Navbar>
+            <Box
+              sx={{
+                bgcolor: (theme) => theme.palette.background.default,
+                color: (theme) => theme.palette.text.primary,
+                minHeight: "100vh",
+                minWidth: "100vw",
+              }}
             >
-              <Sidebar setOpenSearch={setOpenSearch} />
-              <AllRoutes></AllRoutes>
-              <RigthBar></RigthBar>
-            </Stack>
-          </Box>
+              <Stack
+                direction={"row"}
+                spacing={2}
+                justifyContent={"space-between"}
+              >
+                <Sidebar setOpenSearch={setOpenSearch} />
+                <AllRoutes></AllRoutes>
+                <RigthBar></RigthBar>
+              </Stack>
+            </Box>
+          </ThemeProvider>
         )}
-      </ThemeProvider>
+      </Box>
     </Box>
   );
 }

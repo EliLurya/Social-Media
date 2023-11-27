@@ -72,10 +72,10 @@ const NavBar = () => {
   };
 
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: "#47126B" }}>
+    <AppBar position="sticky" sx={{ backgroundColor: "primary" }}>
       <StyledToolbar>
         {/* Logo link */}
-        {matches ? (
+        {matches || !signInSuccessful ? (
           <Box sx={{ mt: 1 }}>
             <Link
               sx={{
@@ -85,7 +85,7 @@ const NavBar = () => {
               }}
               onClick={() => navigate("/signin")}
             >
-              <img width={55} src={logo} alt="Logo"></img>
+              <img width={matches ? 55 : 45} src={logo} alt="Logo"></img>
             </Link>
           </Box>
         ) : (

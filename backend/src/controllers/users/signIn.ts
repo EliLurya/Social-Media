@@ -42,7 +42,7 @@ router.post("/signin", jsonParser, async (req: Request, res: Response) => {
     // Generate a JWT token
     const token: string = jwt.sign(
       { userId: user._id, role: user.role },
-      process.env.YOUR_SECRET_KEY as string, // Ensure the secret key exists
+      process.env.YOUR_SECRET_KEY as string, 
       {
         expiresIn: "8h",
       }
@@ -50,7 +50,7 @@ router.post("/signin", jsonParser, async (req: Request, res: Response) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Use 'secure' in production
+      secure: process.env.NODE_ENV === "production", 
       maxAge: 8 * 3600000, // 8 hours in milliseconds
     });
 

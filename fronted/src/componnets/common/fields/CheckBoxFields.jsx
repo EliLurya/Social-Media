@@ -17,13 +17,13 @@ const CheckBoxFields = ({ name, control, errors }) => {
               // Custom styled Checkbox component
               <Checkbox
                 sx={{
-                  color: "#47126B", // Custom color
+                  color: "primary", // Custom color
                   "&.Mui-checked": {
-                    color: "#47126B", // Custom color when checked
+                    color: (theme) => theme.palette.primary.main, // Custom color when checked
                   },
                 }}
                 {...field} // Spread field properties into Checkbox
-                required 
+                required
               />
             }
             label="I agree to our Terms, and Privacy Policy"

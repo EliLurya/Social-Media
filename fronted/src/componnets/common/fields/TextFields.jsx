@@ -9,26 +9,26 @@ const TextFields = ({ label, name, control, errors }) => {
     <FormControl fullWidth sx={{ mb: "1rem" }}>
       {/* Controller from react-hook-form to manage the TextField state */}
       <Controller
-        name={name} 
+        name={name}
         control={control} // Control object from useForm
         render={({ field }) => (
           <TextField
             {...field} // Spread field properties into TextField
             {...addErrorIntoField(errors[name])} // Adding error handling
-            label={label} 
-            required 
-            variant="filled" 
-            size="medium" 
+            label={label}
+            required
+            variant="filled"
+            size="medium"
             sx={{
               ".MuiInput-root": {
                 "&.Mui-focused": {
-                  borderColor: "transparent", 
+                  borderColor: "transparent",
                 },
               },
               ".MuiFilledInput-root": {
                 // Styles for filled variant
-                backgroundColor: "white", 
-                borderRadius: "20px", 
+                backgroundColor: "white",
+                borderRadius: "20px",
                 "&:before": { borderBottom: "none" }, // Remove underline
                 "&:after": { borderBottom: "none" }, // Remove underline on focus
                 "&.Mui-focused": { backgroundColor: "white" }, // Maintain background on focus
@@ -37,7 +37,7 @@ const TextFields = ({ label, name, control, errors }) => {
                 // Styles for the label
                 color: "black",
                 "&.Mui-focused": {
-                  color: "#47126B", // Color when focused
+                  color: "primary", // Color when focused
                 },
               },
             }}

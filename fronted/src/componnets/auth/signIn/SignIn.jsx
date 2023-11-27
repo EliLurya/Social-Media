@@ -11,6 +11,8 @@ import SignInFailed from "./SignInFailed";
 import GoogleSign from "../GoogleSign";
 import ShowLogo from "../../common/ShowLogo";
 import useResponsive from "../../../utils/useResponsive";
+import LogoTop from "../LogoTop";
+import { getFlexStyles } from "../../common/style/CommonStyles";
 
 // Create a schema for form validation using Yup
 const schema = yup.object({
@@ -62,81 +64,78 @@ const SignIn = () => {
   return (
     <>
       {!isLoading ? (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            mt: "4rem",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            variant="h4"
-            sx={{
-              color: "#e0d3e1",
-              fontWeight: "bold",
-              textDecoration: "underline",
-            }}
-          >
-            Sign In
-          </Typography>
-          <Box
-            noValidate
-            component="form"
-            sx={{ width: matches ? "40%" : "100%", mt: "2rem" }}
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            {/* Email and password input fields */}
-            <TextFields
-              control={control}
-              name="email"
-              label={"Email"}
-              errors={errors}
-            ></TextFields>
-            <PasswordFields
-              name="password"
-              control={control}
-              label={"Password"}
-              errors={errors}
-            ></PasswordFields>
-            <Box>
-              <Link
-                underline="none"
-                href={"/request-password-reset"}
-                color={"#47126B"}
-                fontWeight={"bold"}
-              >
-                forgot password?
-              </Link>
-            </Box>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 1, mb: 2, p: 1.5 }}
+        <Box>
+          <LogoTop></LogoTop>
+
+          <Box sx={getFlexStyles("column")}>
+            <Typography
+              variant="h4"
+              sx={{
+                color: (theme) => theme.palette.primary.AuxiliaryColor,
+                fontWeight: "bold",
+                textDecoration: "underline",
+              }}
             >
               Sign In
-            </Button>
-          </Box>
-          <Box>
-            Don&rsquo;t have an account?
-            <Link
-              underline="none"
-              href={"/signup"}
-              color={"#47126B"}
-              fontWeight={"bold"}
+            </Typography>
+            <Box
+              noValidate
+              component="form"
+              sx={{ width: matches ? "40%" : "100%", mt: "2rem" }}
+              onSubmit={handleSubmit(onSubmit)}
             >
-              {" "}
-              Sign Up
-            </Link>
-          </Box>
-          {/* Display error message if sign-in fails */}
-          {!signInSuccessful && failedSign && (
-            <SignInFailed setFailedSign={setFailedSign}></SignInFailed>
-          )}
-          {/* Google sign-in component */}
-          <Box mt={3} sx={{}}>
-            <GoogleSign></GoogleSign>
+              {/* Email and password input fields */}
+              <TextFields
+                control={control}
+                name="email"
+                label={"Email"}
+                errors={errors}
+              ></TextFields>
+              <PasswordFields
+                name="password"
+                control={control}
+                label={"Password"}
+                errors={errors}
+              ></PasswordFields>
+              <Box>
+                <Link
+                  underline="none"
+                  href={"/request-password-reset"}
+                  color="primary"
+                  fontWeight={"bold"}
+                >
+                  forgot password?
+                </Link>
+              </Box>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 1, mb: 2, p: 1.5 }}
+              >
+                Sign In
+              </Button>
+            </Box>
+            <Box>
+              Don&rsquo;t have an account?
+              <Link
+                underline="none"
+                href={"/signup"}
+                color="primary"
+                fontWeight={"bold"}
+              >
+                {" "}
+                Sign Up
+              </Link>
+            </Box>
+            {/* Display error message if sign-in fails */}
+            {!signInSuccessful && failedSign && (
+              <SignInFailed setFailedSign={setFailedSign}></SignInFailed>
+            )}
+            {/* Google sign-in component */}
+            <Box mt={3} sx={{}}>
+              <GoogleSign></GoogleSign>
+            </Box>
           </Box>
         </Box>
       ) : (

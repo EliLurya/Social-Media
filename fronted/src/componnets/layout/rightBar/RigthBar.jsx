@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import RecentTrend from "./RecentTrend";
 import useResponsive from "../../../utils/useResponsive";
+import { getFlexStyles } from "../../common/style/CommonStyles";
 const RigthBar = () => {
   // Image data for the latest photos section
 
@@ -72,14 +73,12 @@ const RigthBar = () => {
       }}
     >
       <Box
-        sx={{
+        sx={getFlexStyles("column", {
           position: "fixed",
-          display: "flex",
-          alignItems: "center",
           flexDirection: "column",
           right: 30,
           justifyItems: "end",
-        }}
+        })}
       >
         {/* Online Friends Section */}
         <Typography variant="h6" fontWeight={100} mt={2} mb={2}>

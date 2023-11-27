@@ -11,7 +11,10 @@ import {
   Typography,
 } from "@mui/material";
 import { menuItems } from "./menuItems";
+import { Link, useLocation } from "react-router-dom";
 const Sidebar = () => {
+  const location = useLocation(); // Get the current location
+
   const isActive = (href) => {
     return location.pathname === href; // Check if the item's href matches the current path
   };
@@ -32,16 +35,22 @@ const Sidebar = () => {
               <Divider />
               <ListItem disablePadding>
                 <ListItemButton
-                  component="a"
-                  href={item.href}
+                  component={Link}
+                  to={item.href}
                   sx={{
                     "&:hover": {
-                      backgroundColor: "#e0d3e1",
-                      "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-                        color: "#47126B",
+                      backgroundColor: (theme) => theme.palette.menu.hoverMenu,
+                      // Apply hover styles to both the icon and the text
+                      "& .MuiListItemIcon-root, & .MuiTypography-root": {
+                        color: "primary", // Hover color for the icon and text
                       },
                     },
                     ...(isActive(item.href) && {
+                      backgroundColor: (theme) => theme.palette.menu.choice,
+                      color: (theme) => theme.palette.menu.textChoice,
+                      "& .MuiListItemIcon-root": {
+                        color: (theme) => theme.palette.menu.textChoice, // Icon color on hover
+                      },
                       position: "relative", // Needed for the line's absolute positioning
                       "&::before": {
                         // CSS for the line
@@ -51,13 +60,18 @@ const Sidebar = () => {
                         top: "50%",
                         width: "4px",
                         height: "90%",
-                        backgroundColor: "#47126B", // Line color
+                        backgroundColor: (theme) =>
+                          theme.palette.menu.textChoice,
                         transform: "translateY(-50%)",
                       },
                     }),
                   }}
                 >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemIcon
+                    sx={{ color: (theme) => theme.palette.text.primary }}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
                   <ListItemText
                     primary={<Typography variant="h6"> {item.text}</Typography>}
                     onClick={item.onclick ? item.onclick : undefined}

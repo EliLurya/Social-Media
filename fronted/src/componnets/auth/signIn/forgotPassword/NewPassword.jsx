@@ -8,6 +8,7 @@ import { pawdRagExp } from "../../../common/fields/UtilsFields";
 import { useEffect, useState } from "react";
 import * as userService from "../../../../services/userService";
 import useResponsive from "../../../../utils/useResponsive";
+import { getFlexStyles } from "../../../common/style/CommonStyles";
 
 // Validation schema for the password and confirmPassword fields
 const schema = yup.object({
@@ -90,7 +91,7 @@ const NewPassword = () => {
           alignItems: "center",
         }}
       >
-        <CircularProgress size={120} sx={{ color: "#973AA8" }} />
+        <CircularProgress size={120} sx={{ color: "secondary" }} />
         <Typography variant="h4" mt={5}>
           Loading...
         </Typography>
@@ -115,12 +116,9 @@ const NewPassword = () => {
   // Main form layout for password reset
   return (
     <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
+      sx={getFlexStyles("column", {
         mt: "4rem",
-        alignItems: "center",
-      }}
+      })}
     >
       <Typography variant="h5">Reset Password</Typography>
       <Box

@@ -4,6 +4,7 @@ import AddImage from "./addToPost/AddImage";
 import AddEmojiEmotions from "./addToPost/AddEmojiEmotions";
 import { CountextData } from "../../../context/ContextData";
 import { Cancel } from "@mui/icons-material";
+import { getFlexStyles } from "../../common/style/CommonStyles";
 
 // Add component for creating a new post
 const Add = () => {
@@ -56,11 +57,12 @@ const Add = () => {
     <Stack
       component="form"
       sx={{
+        ml: "0.4rem",
         padding: "2%",
         border: "#C6C6C6 1px solid",
         borderRadius: "20px",
         width: "90%",
-        backgroundColor: "white",
+        backgroundColor: (theme) => theme.palette.background.default,
         position: "relative",
       }}
       spacing={2}
@@ -69,24 +71,35 @@ const Add = () => {
     >
       {/* Text input field for post */}
       <TextField
-        sx={{}}
         variant="standard"
         hiddenLabel
         id="filled-hidden-label-small"
         placeholder="What's new?"
         size="small"
         multiline
-        border="none"
         value={postText}
         onChange={handleTextChange}
+        sx={{
+          "& .MuiInput-underline:before": {
+            // Normal state
+            borderBottom: (theme) =>
+              `${theme.palette.primary.AuxiliaryColor} solid 1px`,
+          },
+          "&:hover .MuiInput-underline:before": {
+            // Hover state
+            borderBottom: (theme) => `${theme.palette.primary.main} solid 1px`,
+          },
+          "& .MuiInput-underline:after": {
+            // Focused state
+            borderBottom: (theme) => `${theme.palette.primary.main} solid 2px`,
+          },
+        }}
       />
       {/* Display selected image with cancel option */}
       <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
+        sx={getFlexStyles("none", {
           justifyContent: "center",
-        }}
+        })}
       >
         {postImage && (
           <Box position="relative">
@@ -115,11 +128,21 @@ const Add = () => {
       <Stack direction="row" pt={0} justifyContent={"space-between"}>
         <Box>
           {/* Components to add image and emoji */}
-          <AddImage setPostImage={setPostImage} />
+          <Box
+            component={"span"}
+            sx={{
+              cursor: "pointer",
+            }}
+          >
+            <AddImage setPostImage={setPostImage} />
+          </Box>
           <Box
             component={"span"}
             ml={0.5}
-            sx={{ display: { xs: "none", sm: "none", md: "inline" } }}
+            sx={{
+              cursor: "pointer",
+              display: { xs: "none", sm: "none", md: "inline" },
+            }}
           >
             <AddEmojiEmotions onEmojiSelect={handleEmojiSelect} />
           </Box>

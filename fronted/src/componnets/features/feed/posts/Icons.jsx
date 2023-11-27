@@ -16,7 +16,9 @@ function Icons({ handleShare }) {
     <CardActions>
       {/* Comment Icon */}
       <IconButton aria-label="MapsUgcOutlined">
-        <MapsUgcOutlined />
+        <MapsUgcOutlined
+          sx={{ color: (theme) => theme.palette.text.primary }}
+        />
       </IconButton>
 
       {/* Like Icon with Checkbox for toggle behavior */}
@@ -39,7 +41,7 @@ function Icons({ handleShare }) {
           );
         }}
       >
-        <Share />
+        <Share sx={{ color: (theme) => theme.palette.text.primary }} />
       </IconButton>
     </CardActions>
   );

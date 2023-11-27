@@ -36,14 +36,24 @@ const PasswordFields = ({ label, name, control, errors }) => {
               ".MuiInputLabel-root": {
                 color: "black",
                 "&.Mui-focused": {
-                  color: "#47126B", 
+                  color: "primary",
+                },
+              },
+              ".MuiFilledInput-root": {
+                backgroundColor: "white", // Ensure the background color is white
+                "&:hover": {
+                  backgroundColor: "white", // Background color on hover
+                },
+                "&.Mui-focused": {
+                  backgroundColor: "white", // Background color when focused
                 },
               },
             }}
             InputProps={{
               disableUnderline: true,
-              style: {
-                border: "#e0d3e1 solid 1px",
+              sx: {
+                border: (theme) =>
+                  `${theme.palette.primary.AuxiliaryColor} solid 1px`,
                 backgroundColor: "white",
                 color: "black",
                 borderRadius: "20px",
