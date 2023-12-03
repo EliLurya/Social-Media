@@ -17,14 +17,17 @@ const SignRoutes = () => {
       <Suspense>
         <Routes>
           <Route
-            path="/request-password-reset"
+            path={ROUTES.REQUEST_PASSWORD_RESET}
             element={<ForgotPasswordPage />}
           />
-          <Route path="/varification-user" element={<VerificationUser />} />
-          <Route path="/sign" element={<SignPage />} />
+          <Route
+            path={ROUTES.VAREFECATION_USER}
+            element={<VerificationUser />}
+          />
+          <Route path={ROUTES.SIGN} element={<SignPage />} />
 
           <Route path="/reset-password/:token" element={<NewPasswordPage />} />
-          <Route path="/*" element={<Navigate to={"/sign"} />} />
+          <Route path="/*" element={<Navigate to={ROUTES.SIGN} />} />
         </Routes>
       </Suspense>
     </GoogleOAuthProvider>

@@ -14,7 +14,7 @@ const ProtectedRoute = ({ children, ...rest }) => {
         ) : (
           <Navigate
             to={{
-              pathname: "/sign",
+              pathname: ROUTES.SIGN,
               state: { from: location },
             }}
           />

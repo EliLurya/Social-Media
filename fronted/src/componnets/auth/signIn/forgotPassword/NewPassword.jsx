@@ -8,6 +8,7 @@ import { pawdRagExp } from "../../../common/fields/UtilsFields";
 import { useEffect, useState } from "react";
 import * as userService from "../../../../services/userService";
 import { getFlexStyles } from "../../../common/style/CommonStyles";
+import { ROUTES } from "../../../../utils/routes";
 
 // Validation schema for the password and confirmPassword fields
 const schema = yup.object({
@@ -70,7 +71,7 @@ const NewPassword = () => {
       );
 
       if (responseData.success) {
-        navigate("/sign");
+        navigate(ROUTES.SIGN);
       } else {
         console.error("Failed to reset password:", responseData.error);
       }

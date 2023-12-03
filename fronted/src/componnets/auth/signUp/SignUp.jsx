@@ -9,6 +9,7 @@ import { pawdRagExp } from "../../common/fields/UtilsFields";
 import { useAuth } from "../../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { getFlexStyles } from "../../common/style/CommonStyles";
+import { ROUTES } from "../../../utils/routes";
 
 // Schema for form validation using Yup
 const schema = yup.object({
@@ -69,7 +70,7 @@ const SignUp = ({ setUserSignUp }) => {
         )
       ) {
         setUserSignUp(true)
-      } else navigate("/varification-user");
+      } else navigate(ROUTES.VAREFECATION_USER);
     } catch (error) {
       console.error(error);
     }

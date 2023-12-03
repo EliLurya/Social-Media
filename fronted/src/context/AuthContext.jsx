@@ -28,7 +28,6 @@ export default function AuthProvider({ children }) {
     verifyUser();
   }, []);
 
-
   // Function to handle user sign-up
   const signUp = async (credentials) => {
     console.log(credentials);
@@ -39,7 +38,6 @@ export default function AuthProvider({ children }) {
         return response;
       }
       if (response.success) {
-        console.log(signUpCodeReq);
         if (signUpCodeReq) setSignUpSuccessful(true);
         else {
           delete credentials.validateOnly;

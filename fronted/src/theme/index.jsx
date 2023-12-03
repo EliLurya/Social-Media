@@ -52,7 +52,7 @@ const darkTheme = createTheme(
       menu: {
         choice: "#413e43",
         textChoice: "#973AA8",
-        hoverMenu: "#6411AD",
+        hoverMenu: "#413e43",
       },
     },
   },

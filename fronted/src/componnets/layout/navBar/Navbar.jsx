@@ -62,7 +62,7 @@ const NavBar = () => {
   const handleSignOut = () => {
     setAnchorEl(null); // Close menu
     signOut(); // Sign out
-    navigate("/sign");
+    navigate(ROUTES.SIGN);
   };
 
   const handleClose = (event) => {

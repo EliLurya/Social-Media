@@ -7,6 +7,7 @@ import { getFlexStyles, getHoverButton } from "../common/style/CommonStyles";
 import useResponsive from "../../utils/useResponsive";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { ROUTES } from "../../utils/routes";
 
 // Schema for validation using Yup
 const schema = yup.object({
@@ -41,7 +42,7 @@ const VerificationUser = () => {
       const result = await signUp(combinedData);
       // Navigate based on the result of verification
       if (result.success) {
-        navigate("/sign"); // Navigate to sign-in page on success
+        navigate(ROUTES.SIGN); // Navigate to sign-in page on success
       } else {
         // Set error message if verification fails
         setError("userVerificationCode", {

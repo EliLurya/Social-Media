@@ -42,7 +42,7 @@ const Sidebar = () => {
                       backgroundColor: (theme) => theme.palette.menu.hoverMenu,
                       // Apply hover styles to both the icon and the text
                       "& .MuiListItemIcon-root, & .MuiTypography-root": {
-                        color: "primary", // Hover color for the icon and text
+                        color: (theme) => theme.palette.primary.main, // Hover color for the icon and text
                       },
                     },
                     ...(isActive(item.href) && {
@@ -50,6 +50,9 @@ const Sidebar = () => {
                       color: (theme) => theme.palette.menu.textChoice,
                       "& .MuiListItemIcon-root": {
                         color: (theme) => theme.palette.menu.textChoice, // Icon color on hover
+                      },
+                      "&:hover": {
+                        backgroundColor: (theme) => theme.palette.menu.choice,
                       },
                       position: "relative", // Needed for the line's absolute positioning
                       "&::before": {

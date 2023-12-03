@@ -10,6 +10,7 @@ import {
   getFlexStyles,
   getHoverButton,
 } from "../../../common/style/CommonStyles";
+import { ROUTES } from "../../../../utils/routes";
 
 // Schema for validating the email field
 const schema = yup.object({
@@ -131,7 +132,7 @@ const ForgotPassword = () => {
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "row", mt: 2 }}>
             <Button
-              onClick={() => navigate("/sign")}
+              onClick={() => navigate(ROUTES.SIGN)}
               fullWidth
               variant="contained"
               sx={{ mt: 1, p: 1, mr: 2 }}

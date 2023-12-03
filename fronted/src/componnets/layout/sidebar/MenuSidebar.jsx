@@ -85,36 +85,42 @@ const MenuSideBar = () => {
                   to={item.href}
                   sx={{
                     "&:hover": {
-                      backgroundColor: (theme) =>
-                        theme.palette.primary.AuxiliaryColor,
-                      color: "primary", // Set text color on hover for the whole ListItemButton
-                      // Apply hover styles to the icon specifically
-                      "& .MuiListItemIcon-root": {
-                        color: "primary", // Icon color on hover
+                      backgroundColor: (theme) => theme.palette.menu.hoverMenu,
+                      // Apply hover styles to both the icon and the text
+                      "& .MuiListItemIcon-root, & .MuiTypography-root": {
+                        color: (theme) => theme.palette.primary.main, // Hover color for the icon and text
                       },
                     },
                     ...(isActive(item.href) && {
-                      backgroundColor: (theme) =>
-                        theme.palette.primary.AuxiliaryColor,
-                      color: "primary",
+                      backgroundColor: (theme) => theme.palette.menu.choice,
+                      color: (theme) => theme.palette.menu.textChoice,
                       "& .MuiListItemIcon-root": {
-                        color: "primary", // Icon color on hover
+                        color: (theme) => theme.palette.menu.textChoice, // Icon color on hover
                       },
-                      position: "relative",
+                      "&:hover": {
+                        backgroundColor: (theme) => theme.palette.menu.choice,
+                      },
+                      position: "relative", // Needed for the line's absolute positioning
                       "&::before": {
+                        // CSS for the line
                         content: '""',
                         position: "absolute",
-                        left: 3,
+                        left: 0,
                         top: "50%",
                         width: "4px",
-                        height: "80%",
-                        backgroundColor: "primary",
+                        height: "90%",
+                        backgroundColor: (theme) =>
+                          theme.palette.menu.textChoice,
                         transform: "translateY(-50%)",
                       },
                     }),
                   }}
                 >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemIcon
+                    sx={{ color: (theme) => theme.palette.text.primary }}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
                   <ListItemText primary={item.text} />
                 </ListItemButton>
               </ListItem>
