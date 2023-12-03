@@ -37,6 +37,9 @@ const userSchema = new mongoose.Schema<User>({
   resetPasswordExpires: { type: Date, required: false },
 });
 
+// When the verification code expires, delete from the DB
+userSchema.index({ verificationCodeExpiry: 1 }, { expireAfterSeconds: 0 });
+
 // Custom validation for the signIn field to ensure it's a valid date
 userSchema.path("signUp").validate(function (value: Date) {
   return value instanceof Date && !isNaN(value.getTime());

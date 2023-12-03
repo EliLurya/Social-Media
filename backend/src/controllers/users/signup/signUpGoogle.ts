@@ -1,6 +1,6 @@
 import { OAuth2Client } from "google-auth-library";
 import { Request, Response, Router } from "express";
-import UserModel from "../../models/userSchema";
+import UserModel from "../../../models/userSchema";
 const jwt = require("jsonwebtoken");
 const body_parser = require("body-parser");
 const jsonParser = body_parser.json(); // Middleware for parsing JSON bodies
@@ -8,7 +8,6 @@ const router = Router();
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID); // Google OAuth2 client
 const bcrypt = require("bcrypt");
 
-// POST route for signing up with Google
 // POST route for signing up with Google
 router.post(
   "/signupgoogle",
@@ -62,6 +61,5 @@ router.post(
     }
   }
 );
-
 
 export default router;

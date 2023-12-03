@@ -15,4 +15,6 @@ export interface User extends mongoose.Document {
   rank: number;
   resetPasswordToken?: string;
   resetPasswordExpires?: Date;
+  verificationCode: string;
+  verificationCodeExpiry: Date;
 }
