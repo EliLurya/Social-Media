@@ -31,21 +31,27 @@ const PasswordFields = ({ label, name, control, errors }) => {
             type={showPassword ? "text" : "password"} // Toggle between text and password type
             variant="filled"
             size="medium"
-            required
+            // required
             sx={{
+              ".MuiInput-root": {
+                "&.Mui-focused": {
+                  borderColor: "white",
+                },
+              },
+              ".MuiFilledInput-root": {
+                backgroundColor: "white",
+                borderRadius: "20px",
+                "&:before": { borderBottom: "none" },
+                "&:after": { borderBottom: "none" },
+                "&.Mui-focused": { backgroundColor: "white" }, // Maintain background on focus
+                "&:hover": {
+                  backgroundColor: "white", // Maintain background on hover
+                },
+              },
               ".MuiInputLabel-root": {
                 color: "black",
                 "&.Mui-focused": {
                   color: "primary",
-                },
-              },
-              ".MuiFilledInput-root": {
-                backgroundColor: "white", // Ensure the background color is white
-                "&:hover": {
-                  backgroundColor: "white", // Background color on hover
-                },
-                "&.Mui-focused": {
-                  backgroundColor: "white", // Background color when focused
                 },
               },
             }}

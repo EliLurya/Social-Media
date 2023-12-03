@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+import { ROUTES } from "../utils/routes";
 
 // Lazy load the page components
 const HomePage = React.lazy(() => import("../pages/HomePage"));
@@ -13,8 +14,8 @@ const AllRoutes = () => {
         {/* For checking routes */}
         <Route path="/newPost" element={<NotFoundPage />} />
         <Route path="/post/:username/:postId" element={<SelectedPostPage />} />
-        <Route path="/" element={<Navigate to="/home" />} />
-        <Route path="/*" element={<Navigate to="/home" />} />
+        <Route path="/" element={<Navigate to={ROUTES.HOME} />} />
+        <Route path="/*" element={<Navigate to={ROUTES.HOME} />} />
       </Routes>
     </Suspense>
   );

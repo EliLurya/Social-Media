@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Box, Button, Link, Typography } from "@mui/material";
+import { useState } from "react";
+import { Box, Button, Link } from "@mui/material";
 import TextFields from "../../common/fields/TextFields";
 import PasswordFields from "../../common/fields/PasswordFields";
 import { useForm } from "react-hook-form";
@@ -8,11 +8,8 @@ import * as yup from "yup";
 import { useAuth } from "../../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import SignInFailed from "./SignInFailed";
-import GoogleSign from "../GoogleSign";
-import ShowLogo from "../../common/ShowLogo";
-import useResponsive from "../../../utils/useResponsive";
-import LogoTop from "../LogoTop";
 import { getFlexStyles } from "../../common/style/CommonStyles";
+import { ROUTES } from "../../../utils/routes";
 
 // Create a schema for form validation using Yup
 const schema = yup.object({
@@ -35,53 +32,30 @@ const SignIn = () => {
   });
 
   const [failedSign, setFailedSign] = useState(false); // State to track failed sign-in attempts
-  const [isLoading, setIsLoading] = useState(true); // State to manage initial loading state
   const { signIn, signInSuccessful } = useAuth(); // Accessing authentication-related functions and state from AuthContext
 
   const navigate = useNavigate();
-  const matches = useResponsive();
 
   // Function called on form submission
   const onSubmit = async (data) => {
     try {
       await signIn(data); // Attempt to sign in with provided credentials
       if (signInSuccessful) {
-        navigate("/home");
+        navigate(ROUTES.HOME);
       }
       setFailedSign(true); // Set failed sign-in state if sign-in is not successful
     } catch (error) {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false); // Hide the loading indicator after 1 second
-    }, 1000);
-    return () => clearTimeout(timer); // Clean up the timer on component unmount
-  }, []);
-
   return (
     <>
-      {!isLoading ? (
-        <Box>
-          <LogoTop></LogoTop>
-
+        <Box mr={2} ml={2}>
           <Box sx={getFlexStyles("column")}>
-            <Typography
-              variant="h4"
-              sx={{
-                color: (theme) => theme.palette.primary.AuxiliaryColor,
-                fontWeight: "bold",
-                textDecoration: "underline",
-              }}
-            >
-              Sign In
-            </Typography>
             <Box
               noValidate
               component="form"
-              sx={{ width: matches ? "40%" : "100%", mt: "2rem" }}
+              sx={{ maxWidth: "400px", width: "100%", mt: "2rem" }} // Adjust the maxWidth as needed
               onSubmit={handleSubmit(onSubmit)}
             >
               {/* Email and password input fields */}
@@ -100,9 +74,10 @@ const SignIn = () => {
               <Box>
                 <Link
                   underline="none"
-                  href={"/request-password-reset"}
                   color="primary"
                   fontWeight={"bold"}
+                  onClick={() => navigate(ROUTES.REQUEST_PASSWORD_RESET)}
+                  sx={{ cursor: "pointer" }}
                 >
                   forgot password?
                 </Link>
@@ -115,33 +90,14 @@ const SignIn = () => {
               >
                 Sign In
               </Button>
-            </Box>
-            <Box>
-              Don&rsquo;t have an account?
-              <Link
-                underline="none"
-                href={"/signup"}
-                color="primary"
-                fontWeight={"bold"}
-              >
-                {" "}
-                Sign Up
-              </Link>
-            </Box>
+            </Box>            
             {/* Display error message if sign-in fails */}
             {!signInSuccessful && failedSign && (
               <SignInFailed setFailedSign={setFailedSign}></SignInFailed>
             )}
             {/* Google sign-in component */}
-            <Box mt={3} sx={{}}>
-              <GoogleSign></GoogleSign>
-            </Box>
           </Box>
-        </Box>
-      ) : (
-        // Show logo while loading
-        <ShowLogo></ShowLogo>
-      )}
+        </Box>      
     </>
   );
 };

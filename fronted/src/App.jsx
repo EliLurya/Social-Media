@@ -23,11 +23,11 @@ function App() {
       <Box>
         {!signInSuccessful ? (
           <ThemeProvider theme={lightTheme}>
-            <Navbar className="a" openSearch={openSearch}></Navbar>
+            {/* <Navbar className="a" openSearch={openSearch}></Navbar> */}
 
-            <Container sx={{ maxWidth: "xs" }} className="background-container">
+            <Box className="background-container">
               <SignRoutes></SignRoutes>
-            </Container>
+            </Box>
           </ThemeProvider>
         ) : (
           <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
@@ -37,7 +37,6 @@ function App() {
                 bgcolor: (theme) => theme.palette.background.default,
                 color: (theme) => theme.palette.text.primary,
                 minHeight: "100vh",
-                minWidth: "100vw",
               }}
             >
               <Stack

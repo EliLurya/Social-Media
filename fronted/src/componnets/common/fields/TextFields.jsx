@@ -16,7 +16,7 @@ const TextFields = ({ label, name, control, errors }) => {
             {...field} // Spread field properties into TextField
             {...addErrorIntoField(errors[name])} // Adding error handling
             label={label}
-            required
+            // required
             variant="filled"
             size="medium"
             sx={{
@@ -33,6 +33,7 @@ const TextFields = ({ label, name, control, errors }) => {
                 "&:after": { borderBottom: "none" }, // Remove underline on focus
                 "&.Mui-focused": { backgroundColor: "white" }, // Maintain background on focus
               },
+              
               ".MuiInputLabel-root": {
                 // Styles for the label
                 color: "black",
@@ -40,12 +41,13 @@ const TextFields = ({ label, name, control, errors }) => {
                   color: "primary", // Color when focused
                 },
               },
+              
             }}
             InputProps={{ disableUnderline: true }} // Disable the underline
             inputProps={{
               // Additional props for the input element
               autoComplete: name, // Autocomplete attribute
-              style: {
+              sx: {
                 // Custom styles for the input element
                 border: "#e0d3e1 solid 1px",
                 backgroundColor: "white",

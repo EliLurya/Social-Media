@@ -12,15 +12,15 @@ const LogoTop = () => {
         sx={getFlexStyles("row", {
           position: "relative",
           right: matches ? 80 : 50,
-          mt:5,
+          mt: 5,
           mb: 1,
         })}
       >
-        <Divider width={"100%"}></Divider>
+        <Divider width={"100%"} sx={{ backgroundColor: "white" }}></Divider>
         <Box>
           <img src={logo} alt="Loading" width={matches ? 80 : 50} />
         </Box>
-        <Divider width={"100%"}></Divider>
+        <Divider width={"100%"} sx={{ backgroundColor: "white" }}></Divider>
       </Box>
     </Box>
   );

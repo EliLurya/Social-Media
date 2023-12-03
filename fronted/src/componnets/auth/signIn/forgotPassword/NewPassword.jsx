@@ -7,7 +7,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { pawdRagExp } from "../../../common/fields/UtilsFields";
 import { useEffect, useState } from "react";
 import * as userService from "../../../../services/userService";
-import useResponsive from "../../../../utils/useResponsive";
 import { getFlexStyles } from "../../../common/style/CommonStyles";
 
 // Validation schema for the password and confirmPassword fields
@@ -24,7 +23,6 @@ const schema = yup.object({
 const NewPassword = () => {
   const { token } = useParams(); // Retrieve the reset token from URL parameters
   const navigate = useNavigate();
-  const matches = useResponsive(); // Custom hook for responsive design
   const [isLoading, setIsLoading] = useState(true); // State for loading indicator
   const [tokenValidationMessage, setTokenValidationMessage] = useState("");
 
@@ -37,7 +35,7 @@ const NewPassword = () => {
         if (!responseData.success) {
           setTokenValidationMessage("Invalid or expired reset token");
           setTimeout(() => {
-            navigate("/signin");
+            navigate("sign");
           }, 1500);
         }
       } catch (error) {
@@ -72,7 +70,7 @@ const NewPassword = () => {
       );
 
       if (responseData.success) {
-        navigate("/signin");
+        navigate("/sign");
       } else {
         console.error("Failed to reset password:", responseData.error);
       }
@@ -105,6 +103,7 @@ const NewPassword = () => {
       <Box
         sx={{
           mt: "4rem",
+          m:2,
           textAlign: "center",
         }}
       >
@@ -124,7 +123,8 @@ const NewPassword = () => {
       <Box
         noValidate
         component="form"
-        sx={{ width: matches ? "40%" : "100%", mt: "2rem" }}
+        // sx={{ width: matches ? "40%" : "100%", mt: "2rem" }}
+        sx={{ maxWidth: "400px", width: "100%", mt: "2rem" }}
         onSubmit={handleSubmit(onSubmit)}
       >
         <PasswordFields

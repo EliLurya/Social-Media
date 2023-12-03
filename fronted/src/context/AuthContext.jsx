@@ -8,8 +8,9 @@ const AuthContext = createContext();
 export default function AuthProvider({ children }) {
   // State to track sign-up, sign-in status, and any errors
   const [signUpSuccessful, setSignUpSuccessful] = useState(false);
-  const [errorSignUp, setErrorSignUp] = useState("");
   const [signInSuccessful, setSignInSuccessful] = useState(false);
+  const [signUpCodeReq, setSignUpCodeReq] = useState(false);
+  const [dataSignUp, setDataSignUp] = useState("");
   useEffect(() => {
     const verifyUser = async () => {
       try {
@@ -27,21 +28,24 @@ export default function AuthProvider({ children }) {
     verifyUser();
   }, []);
 
-  // Reset the sign-up error message
-  const resetErrorSignUp = () => {
-    setErrorSignUp("");
-  };
 
   // Function to handle user sign-up
   const signUp = async (credentials) => {
+    console.log(credentials);
+
     try {
       const response = await userService.signUp(credentials);
       if (!response.success) {
-        setErrorSignUp(response.message);
-        return;
+        return response;
       }
       if (response.success) {
-        setSignUpSuccessful(true);
+        console.log(signUpCodeReq);
+        if (signUpCodeReq) setSignUpSuccessful(true);
+        else {
+          delete credentials.validateOnly;
+          setDataSignUp(credentials);
+          return response;
+        }
       }
     } catch (error) {
       console.error(error);
@@ -56,7 +60,6 @@ export default function AuthProvider({ children }) {
         return;
       }
       setSignInSuccessful(true);
-
     } catch (error) {
       console.error(error);
     }
@@ -95,10 +98,10 @@ export default function AuthProvider({ children }) {
         signOut,
         signUpSuccessful,
         setSignUpSuccessful,
-        errorSignUp,
-        resetErrorSignUp,
         signInSuccessful,
         handleLoginSuccessGoogle,
+        dataSignUp,
+        setSignUpCodeReq,
       }}
     >
       {children}

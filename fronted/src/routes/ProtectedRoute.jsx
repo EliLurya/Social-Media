@@ -1,5 +1,6 @@
 import { Route, Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { ROUTES } from "../utils/routes";
 
 const ProtectedRoute = ({ children, ...rest }) => {
   const { signInSuccessful } = useAuth();
@@ -13,7 +14,7 @@ const ProtectedRoute = ({ children, ...rest }) => {
         ) : (
           <Navigate
             to={{
-              pathname: "/signin",
+              pathname: "/sign",
               state: { from: location },
             }}
           />

@@ -4,90 +4,106 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import TextFields from "../../../common/fields/TextFields";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as userService from "../../../../services/userService";
-import useResponsive from "../../../../utils/useResponsive";
-import { getFlexStyles } from "../../../common/style/CommonStyles";
+import {
+  getFlexStyles,
+  getHoverButton,
+} from "../../../common/style/CommonStyles";
 
-// Schema for form validation using Yup
+// Schema for validating the email field
 const schema = yup.object({
-  email: yup.string().required("Email Name is required").email(),
+  email: yup.string().required("Email is required").email(),
 });
 
 const ForgotPassword = () => {
-  // useForm hook to manage form state and handle submission
+  // useForm hook to manage form state and handle form submission
   const {
     handleSubmit,
     formState: { errors },
     control,
   } = useForm({
-    defaultValues: {
-      email: "",
-    },
-    resolver: yupResolver(schema), // Integrating Yup for validation
+    defaultValues: { email: "" },
+    resolver: yupResolver(schema),
   });
 
-  const [userMessage, setUserMessage] = useState(false); // State to manage user feedback message
-  const navigate = useNavigate(); // Hook for programmatic navigation
-  const matches = useResponsive(); // Custom hook for responsive design
+  // State variables
+  const [userMessage, setUserMessage] = useState(false); // To display the message after form submission
+  const [requestedEmail, setRequestedEmail] = useState(""); // To keep track of the email entered
+  const [lastEmailSentTime, setLastEmailSentTime] = useState(null); // To track the time of the last email sent
+  const [canResendEmail, setCanResendEmail] = useState(true); // To control the button's disabled state
+  const navigate = useNavigate(); // For programmatic navigation
+  const RESEND_EMAIL_TIME_LIMIT = 10 * 1000; // Time limit for resending email (10 seconds)
 
   // Function to handle form submission
   const onSubmit = async (data) => {
     try {
+      setRequestedEmail(data.email);
       const response = await userService.requestPasswordReset(data);
-
       if (response.success) {
-        setUserMessage(true); // Update state if password reset request is successful
-      } else {
-        // Display alert if there's an error
-        alert(response.error);
+        setUserMessage(true); // Display a message after successful submission
+        setLastEmailSentTime(new Date().getTime());
       }
     } catch (error) {
-      // Log and alert any errors encountered
-      console.error("Error:", error);
-      alert("An error occurred while trying to reset password.");
+      console.error("Error in sending reset email:", error);
     }
   };
+
+  // Function to resend the password reset email
+  const handleResendPasswordResetEmail = async () => {
+    if (!requestedEmail || !canResendEmail) return; // Don't proceed if no email or if resend is not allowed yet
+    try {
+      const response = await userService.requestPasswordReset({
+        email: requestedEmail,
+      });
+      if (response.success) {
+        setLastEmailSentTime(new Date().getTime());
+        setCanResendEmail(false); // Disable the resend button
+      }
+    } catch (error) {
+      console.error("Error in resending reset email:", error);
+    }
+  };
+
+  // Effect to re-enable the resend button after the time limit
+  useEffect(() => {
+    let timer;
+    if (lastEmailSentTime) {
+      timer = setTimeout(() => {
+        setCanResendEmail(true);
+      }, RESEND_EMAIL_TIME_LIMIT);
+    }
+    return () => clearTimeout(timer); // Clean up the timer
+  }, [lastEmailSentTime]);
 
   return (
     <>
       {!userMessage ? (
-        // Form layout for resetting the password
-        <Box
-          sx={getFlexStyles("column", {
-            mt: "4rem",
-          })}
-        >
+        <Box sx={getFlexStyles("column", { m: 2 })}>
           <Typography
             variant="h4"
             sx={{
               color: (theme) => theme.palette.primary.AuxiliaryColor,
               fontWeight: "bold",
               textDecoration: "underline",
+              mt: "3rem",
             }}
           >
-            Rest Password
+            Reset Password
           </Typography>
           <Box
             component="form"
             noValidate
-            sx={{ width: matches ? "40%" : "100%", mt: "2rem" }}
+            sx={{ maxWidth: "400px", width: "100%", mt: "2rem" }}
             onSubmit={handleSubmit(onSubmit)}
           >
-            {/* Email input field */}
             <TextFields
               control={control}
               name="email"
-              label={"Email"}
+              label="Email"
               errors={errors}
-            ></TextFields>
-            {/* Buttons for submitting or cancelling the password reset */}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
+            />
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
               <Button
                 type="submit"
                 fullWidth
@@ -100,17 +116,7 @@ const ForgotPassword = () => {
                 onClick={() => navigate(-1)}
                 fullWidth
                 variant="outlined"
-                sx={{
-                  mt: 1,
-                  p: 1,
-                  backgroundColor: "transparent",
-                  ":hover": {
-                    backgroundColor: "transparent",
-                    borderColor: (theme) => theme.palette.secondary.main,
-                  },
-                  color: (theme) => theme.palette.secondary.main,
-                  borderColor: (theme) => theme.palette.primary.main,
-                }}
+                sx={getHoverButton({ mt: 1, p: 1 })}
               >
                 Cancel
               </Button>
@@ -118,30 +124,31 @@ const ForgotPassword = () => {
           </Box>
         </Box>
       ) : (
-        // Message layout shown after successfully requesting a password reset
-        <Box          
-          sx={getFlexStyles("column", {
-            mt: "4rem",
-          })}
-        >
-          <Typography
-            variant="h6"
-            sx={{
-              textAlign: "center", // Center align the text
-            }}
-          >
-            If an account with that email was found, we&rsquo;ve sent a reset
+        <Box sx={getFlexStyles("column", { mt: "4rem" })}>
+          <Typography variant="h6" sx={{ textAlign: "center" }}>
+            If an account with that email was found, we&apos;ve sent a reset
             link.
           </Typography>
-          <Button
-            sx={{
-              mt: 2,
-            }}
-            variant="contained"
-            onClick={() => navigate(-1)}
-          >
-            Sign In
-          </Button>
+          <Box sx={{ display: "flex", flexDirection: "row", mt: 2 }}>
+            <Button
+              onClick={() => navigate("/sign")}
+              fullWidth
+              variant="contained"
+              sx={{ mt: 1, p: 1, mr: 2 }}
+            >
+              Sign In
+            </Button>
+            <Button
+              onClick={handleResendPasswordResetEmail}
+              disabled={!canResendEmail}
+              title={!canResendEmail ? "Wait 10 seconds to resend" : ""}
+              fullWidth
+              variant="outlined"
+              sx={getHoverButton({ mt: 1, p: 1 })}
+            >
+              I don&apos;t got the email
+            </Button>
+          </Box>
         </Box>
       )}
     </>

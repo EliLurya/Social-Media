@@ -7,16 +7,18 @@ import {
   Box,
   MenuItem,
   Menu,
-  Link,
 } from "@mui/material";
+
 import { Mail, Notifications } from "@mui/icons-material";
 import { useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link as RouterLink } from "react-router-dom";
 import logo from "../../../assets/images/picsvg_download22.svg";
 import "./NavBar.css";
 import useResponsive from "../../../utils/useResponsive";
 import MenuSideBar from "../sidebar/MenuSidebar";
+import { getFlexStyles } from "../../common/style/CommonStyles";
+import { ROUTES } from "../../../utils/routes";
 
 // Styled component for the toolbar with flex layout
 const StyledToolbar = styled(Toolbar)({
@@ -60,7 +62,7 @@ const NavBar = () => {
   const handleSignOut = () => {
     setAnchorEl(null); // Close menu
     signOut(); // Sign out
-    navigate("/signin"); // Navigate to sign-in
+    navigate("/sign");
   };
 
   const handleClose = (event) => {
@@ -72,21 +74,21 @@ const NavBar = () => {
   };
 
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: "primary" }}>
+    <AppBar
+      position="sticky"
+      sx={{ backgroundColor: "primary", width: "100%", minWidth:"100%" }}
+    >
       <StyledToolbar>
-        {/* Logo link */}
         {matches || !signInSuccessful ? (
-          <Box sx={{ mt: 1 }}>
-            <Link
-              sx={{
-                minWidth: 0,
-                p: 0,
-                cursor: "pointer",
-              }}
-              onClick={() => navigate("/signin")}
-            >
+          <Box
+            sx={getFlexStyles("row", {
+              justifyContent: "space-between",
+              width: "100%",
+            })}
+          >
+            <Box sx={{ mt: 1 }}>
               <img width={matches ? 55 : 45} src={logo} alt="Logo"></img>
-            </Link>
+            </Box>
           </Box>
         ) : (
           <MenuSideBar></MenuSideBar>
