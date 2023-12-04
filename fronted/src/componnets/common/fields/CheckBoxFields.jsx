@@ -3,7 +3,7 @@ import { Controller } from "react-hook-form";
 import ErrorMessage from "../ErrorMessage";
 
 // CheckBoxFields component for rendering a checkbox with label and error message
-const CheckBoxFields = ({ name, control, errors }) => {
+const CheckBoxFields = ({ name, control, errors, label }) => {
   return (
     <>
       {/* Controller from react-hook-form to manage checkbox state */}
@@ -23,10 +23,9 @@ const CheckBoxFields = ({ name, control, errors }) => {
                   },
                 }}
                 {...field} // Spread field properties into Checkbox
-                required
               />
             }
-            label="I agree to our Terms, and Privacy Policy"
+            label={label}
           />
         )}
       />

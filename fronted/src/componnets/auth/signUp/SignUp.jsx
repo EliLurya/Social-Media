@@ -78,11 +78,11 @@ const SignUp = ({ setUserSignUp }) => {
   return (
     <>
       <Box>
-        <Box sx={getFlexStyles("column",{m:2})}>
+        <Box sx={getFlexStyles("column", { m: 2 })}>
           <Box
             noValidate
             component="form"
-            sx={{ maxWidth: "400px", width: "100%", mt: "2rem" }} 
+            sx={{ maxWidth: "400px", width: "100%", mt: "2rem" }}
             onSubmit={handleSubmit(onSubmit)}
           >
             {/* Form fields for user input */}
@@ -110,8 +110,14 @@ const SignUp = ({ setUserSignUp }) => {
               label="Confirm Password"
               errors={errors}
             />
-            <CheckBoxFields name="privacy" control={control} errors={errors} />
-
+            <Box ml={1}>
+              <CheckBoxFields
+                name="privacy"
+                control={control}
+                errors={errors}
+                label={"I agree to our Terms, and Privacy Policy"}
+              />
+            </Box>
             {/* Sign Up and Cancel buttons */}
             <Button
               type="submit"
@@ -121,7 +127,7 @@ const SignUp = ({ setUserSignUp }) => {
             >
               Sign Up
             </Button>
-          </Box>         
+          </Box>
         </Box>
       </Box>
     </>
