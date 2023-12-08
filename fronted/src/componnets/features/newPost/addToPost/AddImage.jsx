@@ -11,11 +11,9 @@ const AddImage = ({ setPostImage }) => {
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      let imageUrl = URL.createObjectURL(file); // Convert the file to a URL
-      setPostImage(imageUrl); // Pass the selected image to the parent component
-
-      // Clear the file input to allow selecting the same image
-      event.target.value = "";
+      setPostImage(file);
+      // Reset the input value after setting the image
+      event.target.value = null;
     }
   };
 

@@ -31,4 +31,8 @@ export const OptionsUrl = {
     url: "/users/check-auth",
     method: "GET",
   },
+  newPost: {
+    url: "/user/action/newPost",
+    method: "POST",
+  },
 };

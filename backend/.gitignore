@@ -26,3 +26,4 @@ dist-ssr
 .env
 .what to do next
 nodemon.json
+service_accunt.json

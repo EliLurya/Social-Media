@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import * as userService from "../services/userService";
+import { getAuth, signInWithCustomToken } from "firebase/auth";
 
 // Create a context for authentication
 const AuthContext = createContext();
@@ -57,6 +58,10 @@ export default function AuthProvider({ children }) {
       if (!response.success) {
         return;
       }
+      const auth = getAuth();
+      //Token for firebaseToken
+      await signInWithCustomToken(auth, response.firebaseToken);
+
       setSignInSuccessful(true);
     } catch (error) {
       console.error(error);
@@ -82,7 +87,12 @@ export default function AuthProvider({ children }) {
     try {
       const token = credentialResponse.credential;
       const response = await userService.signInWithGoogle(token);
-      if (response.success) setSignInSuccessful(true);
+      if (response.success) {
+        const auth = getAuth();
+        //Token for firebaseToken
+        await signInWithCustomToken(auth, response.firebaseToken);
+        setSignInSuccessful(true);
+      }
     } catch (error) {
       console.error("Login Failed:", error);
     }

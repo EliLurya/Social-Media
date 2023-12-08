@@ -7,6 +7,7 @@ const jsonParser = body_parser.json(); // Middleware for parsing JSON bodies
 const router = Router();
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID); // Google OAuth2 client
 const bcrypt = require("bcrypt");
+const admin = require("firebase-admin");
 
 // POST route for signing up with Google
 router.post(
@@ -51,9 +52,15 @@ router.post(
         maxAge: 8 * 3600000, // 8 hours in milliseconds
       });
 
+      //Create firebase token
+    const firebaseToken = await admin
+      .auth()
+      .createCustomToken(user._id.toString());
+
       res.json({
         success: true,
         message: "Google sign-in successful",
+        firebaseToken: firebaseToken,
       });
     } catch (error) {
       console.error("Google sign-in error:", error);

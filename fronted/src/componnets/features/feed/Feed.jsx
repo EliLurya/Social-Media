@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { Post } from "./posts/posts/Post";
-import Add from "../newPost/Add";
+import Add from "../newPost/add/Add";
 import { getFlexStyles } from "../../common/style/CommonStyles";
 
 // Feed component represents the main area where posts are displayed

@@ -7,6 +7,7 @@ const jsonParser = body_parser.json();
 const router: Router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const admin = require("firebase-admin");
 
 
 // User sign-in
@@ -42,23 +43,28 @@ router.post("/signin", jsonParser, async (req: Request, res: Response) => {
     // Generate a JWT token
     const token: string = jwt.sign(
       { userId: user._id, role: user.role },
-      process.env.YOUR_SECRET_KEY as string, 
+      process.env.YOUR_SECRET_KEY as string,
       {
         expiresIn: "8h",
       }
     );
 
+    const firebaseToken = await admin
+      .auth()
+      .createCustomToken(user._id.toString());
+
+    // Set the token as an HTTP-only cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", 
+      secure: process.env.NODE_ENV === "production",
       maxAge: 8 * 3600000, // 8 hours in milliseconds
     });
 
     res.json({
       success: true,
       message: "User signed in successfully",
+      firebaseToken: firebaseToken,
     });
-
   } catch (error) {
     console.error("Error signing in:", error);
     res.status(500).json({ success: false, error: "Internal Server Error" });
