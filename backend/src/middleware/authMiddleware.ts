@@ -7,7 +7,7 @@ export const authentication = (access: string) => {
   const validateToken = (req: Request, res: Response, next: NextFunction) => {
     // Extract token from cookies
     const token = req.cookies.token;
-    
+
     if (!token) {
       res.status(401).json({ success: false, error: "Missing token" });
       return;

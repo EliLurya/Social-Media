@@ -2,7 +2,7 @@ import Compressor from "compressorjs";
 
 const compressImage = (file, callback, errorCallback) => {
   new Compressor(file, {
-    quality: 0.6, 
+    quality: 0.6,
     success(result) {
       callback(result);
     },

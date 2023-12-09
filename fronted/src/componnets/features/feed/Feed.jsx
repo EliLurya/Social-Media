@@ -11,7 +11,7 @@ const Feed = () => {
       <Box flex={6} p={2}>
         {/* Container for the 'Add' component */}
         <Box
-          sx={getFlexStyles("column", {           
+          sx={getFlexStyles("column", {
             margin: "1rem 1.5rem 2rem 0",
           })}
         >

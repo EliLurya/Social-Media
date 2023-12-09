@@ -9,7 +9,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const admin = require("firebase-admin");
 
-
 // User sign-in
 router.post("/signin", jsonParser, async (req: Request, res: Response) => {
   const { email, password } = req.body; // `login` can be either the email or the username

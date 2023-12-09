@@ -53,9 +53,9 @@ router.post(
       });
 
       //Create firebase token
-    const firebaseToken = await admin
-      .auth()
-      .createCustomToken(user._id.toString());
+      const firebaseToken = await admin
+        .auth()
+        .createCustomToken(user._id.toString());
 
       res.json({
         success: true,

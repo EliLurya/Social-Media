@@ -1,10 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import {
-  Button,
-  Stack,
-} from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { CountextData } from "../../../../context/ContextData";
-import uploadImage from "../../../../utils/imagesOperations/UploadImage";
+import uploadImage from "../../../../utils/imagesOperations/uploadImage";
 import compressImage from "../../../../utils/imagesOperations/compressImage";
 import ProgressBar from "../../../../utils/imagesOperations/ProgressBar";
 import PostInputField from "./PostInputField";
@@ -13,7 +10,7 @@ import AddOptions from "./AddOptions";
 
 // Add component for creating a new post
 const Add = () => {
-  const {  createPost } = useContext(CountextData); // Get the addNewPost function from context
+  const { createPost } = useContext(CountextData); // Get the addNewPost function from context
   const [postText, setPostText] = useState(""); // State for post text
   const [postImage, setPostImage] = useState(null); // State for post image
   const [textInput, setTextInput] = useState(false); // State to track if input field has text or image

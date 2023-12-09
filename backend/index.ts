@@ -11,6 +11,11 @@ const app = express();
 const PORT = process.env.PORT;
 const DB_URI = process.env.DB_URI || "mongodb://localhost:27017";
 const cors = require("cors");
+const corsOptions = {
+  origin: process.env.URL_FRONTED,
+  credentials: true,
+};
+
 
 const admin = require("firebase-admin");
 const serviceAccount = require("./service_accunt.json");
@@ -18,10 +23,7 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-const corsOptions = {
-  origin: process.env.URL_FRONTED,
-  credentials: true,
-};
+
 app.use(cors(corsOptions));
 
 app.use(cookieParser());
