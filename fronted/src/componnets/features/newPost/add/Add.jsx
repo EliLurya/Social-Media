@@ -16,7 +16,7 @@ const Add = () => {
   const [textInput, setTextInput] = useState(false); // State to track if input field has text or image
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
-
+  const [textOnly, setTextOnly] = useState(true);
   // Handle changes in the text field
   const handleTextChange = (e) => {
     const inputText = e.target.value;
@@ -29,50 +29,39 @@ const Add = () => {
       setIsUploading(true); // Start uploading
       let imageUrl = "";
 
-      // Check if there is an image to upload
       if (postImage) {
-        // Compress the image before uploading
-        compressImage(
-          postImage,
-          async (compressedImage) => {
-            try {
-              // Upload the compressed image and track the upload progress
-              imageUrl = await uploadImage(compressedImage, (progress) => {
-                setUploadProgress(progress); // Update the upload progress state
-              });
-
-              // Combine the post text and the uploaded image URL into one object
-              const completePostData = {
-                text: postText,
-                imageUrl: imageUrl,
-              };
-              console.log("Post data ready to send:", completePostData);
-
-              // Send the post data to your server
-              const response = await createPost(completePostData);
-              console.log("Response from server:", response);
-
-              // Reset the form state after successful post creation
-              setPostText(""); // Reset the post text
-              setPostImage(null); // Clear the image
-              setTextInput(false); // Indicate that there's no text or image input
-              setIsUploading(false); // End uploading
-              setUploadProgress(0);
-            } catch (error) {
-              // Handle errors during the image upload
-              setIsUploading(false); // End uploading in case of an error
-              console.error("Error during image upload:", error);
-            }
-          },
-          (error) => {
-            // Handle errors during image compression
-            console.error("Error during image compression:", error);
-          }
-        );
+        try {
+          setTextOnly(false);
+          const compressedImage = await compressImage(postImage);
+          imageUrl = await uploadImage(compressedImage, (progress) => {
+            setUploadProgress(progress); // Update the upload progress state
+          });
+          console.log("Image URL after upload:", imageUrl);
+        } catch (error) {
+          console.error("Error during image processing:", error);
+          setIsUploading(false); // End uploading in case of an error
+          setTextOnly(true);
+          return; // Exit the function if an error occurs
+        }
       }
+      // Combine the post text and the uploaded image URL into one object
+      const completePostData = {
+        text: postText,
+        imageUrl: imageUrl,
+      };
+      // Send the post data to your server
+      await createPost(completePostData);
+      // Reset the form state after successful post creation
+      setPostText("");
+      setPostImage(null);
+      setTextInput(false);
+      setIsUploading(false);
+      setUploadProgress(0);
+      setTextOnly(true);
     } catch (error) {
-      // Handle other errors in the handleSend function
       console.error("Error handling the send operation:", error);
+      setIsUploading(false); // End uploading in case of an error
+      setTextOnly(true);
     }
   };
 
@@ -126,7 +115,7 @@ const Add = () => {
         </Button>
       </Stack>
       {/* Progress bar */}
-      {isUploading && (
+      {!textOnly && isUploading && (
         <ProgressBar uploadProgress={uploadProgress}></ProgressBar>
       )}
     </Stack>

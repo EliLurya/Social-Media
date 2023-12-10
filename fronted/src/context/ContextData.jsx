@@ -21,13 +21,13 @@ function CountextDataProvider({ children }) {
   };
   // Function to create a new post
   const createPost = async (postData) => {
+    console.log(typeof(postData));
     try {
       const response = await postService.createPost(postData);
       if (!response.success) {
         console.error("Failed to create post:", response.error);
         return;
       }
-      // Handle successful post creation (if needed)
     } catch (error) {
       console.error("Error creating post:", error);
     }

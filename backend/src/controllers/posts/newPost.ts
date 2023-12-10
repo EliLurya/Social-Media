@@ -16,8 +16,9 @@ router.post(
   authentication("user"), // Apply authentication middleware for user access
   async (req: Request, res: Response) => {    
     const userId: string = req.user.userId; // Get user ID from authenticated request
-    const { post } = req.body;
-    if (!post) {
+    const { text, imageUrl } = req.body;    
+    
+    if (!text && !imageUrl) {
       res.status(400).json({ success: false, error: "Send to the body post" });
       return;
     }
@@ -32,7 +33,8 @@ router.post(
 
       // Create a new instance of PostModel and set its properties
       const newPost = new PostModel({
-        post,
+        text,
+        imageUrl,
         likes: 0,
         idPeopleThatLike: [],
         comments: [],

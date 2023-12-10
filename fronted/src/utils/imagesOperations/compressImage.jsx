@@ -1,15 +1,16 @@
 import Compressor from "compressorjs";
 
-const compressImage = (file, callback, errorCallback) => {
-  new Compressor(file, {
-    quality: 0.6,
-    success(result) {
-      callback(result);
-    },
-    error(err) {
-      if (errorCallback) errorCallback(err);
-      else console.error("Compression error:", err.message);
-    },
+const compressImage = (file) => {
+  return new Promise((resolve, reject) => {
+    new Compressor(file, {
+      quality: 0.6,
+      success(result) {
+        resolve(result);
+      },
+      error(err) {
+        reject(err);
+      },
+    });
   });
 };
 

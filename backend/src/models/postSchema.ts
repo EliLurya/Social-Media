@@ -2,12 +2,10 @@ import mongoose from "mongoose";
 import { Post } from "../types/postTypes";
 
 const postSchema = new mongoose.Schema<Post>({
-  post: {
+  text: {
     type: String,
-    required: [true, "post is required"],
-    minlength: [1, "post must be at least 1 character long"],
-    maxlength: [280, "post can be up to 280 characters long"],
   },
+  imageUrl: { type: String },
   likes: {
     type: Number,
     default: 0,

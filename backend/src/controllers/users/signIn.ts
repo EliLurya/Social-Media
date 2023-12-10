@@ -48,6 +48,7 @@ router.post("/signin", jsonParser, async (req: Request, res: Response) => {
       }
     );
 
+    //Create firebase token
     const firebaseToken = await admin
       .auth()
       .createCustomToken(user._id.toString());

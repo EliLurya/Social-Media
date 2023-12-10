@@ -4,7 +4,8 @@ import { LikeEntry } from "./likeEntryTypes"; // Assuming you move LikeEntry to 
 
 export interface Post {
   _id: mongoose.Types.ObjectId;
-  post: string;
+  text: string;
+  imageUrl:string
   likes: number;
   idPeopleThatLike: mongoose.Types.ObjectId[] | LikeEntry[];
   comments: mongoose.Types.ObjectId[] | Comment[];

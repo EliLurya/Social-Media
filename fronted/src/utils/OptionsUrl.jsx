@@ -1,38 +1,43 @@
+const options = {
+  GET : "GET",
+  POST : "POST",
+}
+
 export const OptionsUrl = {
   signUp: {
     url: "/users/signup",
-    method: "POST",
+    method: options.POST,
   },
   signIn: {
     url: "/users/signin",
-    method: "POST",
+    method: options.POST,
   },
   requestPasswordReset: {
     url: "/users/request-password-reset",
-    method: "POST",
+    method: options.POST,
   },
   sendEmailPasswordReset: {
     url: "/users/validate-reset-token/",
-    method: "GET",
+    method: options.GET,
   },
   newPasswordReset: {
     url: "/users/reset-password",
-    method: "POST",
+    method: options.POST,
   },
   connectGoogle: {
     url: "/users/signupgoogle",
-    method: "POST",
+    method: options.POST,
   },
   signOut: {
     url: "/users/signout",
-    method: "POST",
+    method: options.POST,
   },
   checkAuth: {
     url: "/users/check-auth",
-    method: "GET",
+    method: options.GET,
   },
   newPost: {
     url: "/user/action/newPost",
-    method: "POST",
+    method: options.POST,
   },
 };
