@@ -33,6 +33,7 @@ router.post(
 
       // Create a new instance of PostModel and set its properties
       const newPost = new PostModel({
+        user,
         text,
         imageUrl,
         likes: 0,

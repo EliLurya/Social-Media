@@ -40,4 +40,8 @@ export const OptionsUrl = {
     url: "/user/action/newPost",
     method: options.POST,
   },
+  allPosts: {
+    url: "/user/action/feed",
+    method: options.GET,
+  },
 };

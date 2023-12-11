@@ -36,7 +36,6 @@ const Add = () => {
           imageUrl = await uploadImage(compressedImage, (progress) => {
             setUploadProgress(progress); // Update the upload progress state
           });
-          console.log("Image URL after upload:", imageUrl);
         } catch (error) {
           console.error("Error during image processing:", error);
           setIsUploading(false); // End uploading in case of an error

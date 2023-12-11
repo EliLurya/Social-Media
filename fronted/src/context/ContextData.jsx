@@ -21,7 +21,7 @@ function CountextDataProvider({ children }) {
   };
   // Function to create a new post
   const createPost = async (postData) => {
-    console.log(typeof(postData));
+    console.log(typeof postData);
     try {
       const response = await postService.createPost(postData);
       if (!response.success) {
@@ -33,8 +33,19 @@ function CountextDataProvider({ children }) {
     }
   };
 
+  const allPosts = async () => {
+    try {
+      const response = await postService.feedPosts();
+      console.log(response);
+      console.log(typeof response);
+      return response
+    } catch (error) {
+      console.error("Error creating post:", error);
+    }
+  };
+
   return (
-    <CountextData.Provider value={{ postDetails, addNewPost, createPost }}>
+    <CountextData.Provider value={{ postDetails, addNewPost, createPost,allPosts }}>
       {children}
     </CountextData.Provider>
   );

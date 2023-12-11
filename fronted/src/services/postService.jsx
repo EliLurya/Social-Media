@@ -7,3 +7,9 @@ export const createPost = async (postData) => {
     body: postData,
   });
 };
+
+export const feedPosts = async () => {
+  return sendRequest(OptionsUrl.allPosts.url, {
+    method: OptionsUrl.allPosts.method,
+  });
+};
