@@ -14,7 +14,7 @@ const SignRoutes = () => {
 
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
-      <Suspense>
+      <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route
             path={ROUTES.REQUEST_PASSWORD_RESET}

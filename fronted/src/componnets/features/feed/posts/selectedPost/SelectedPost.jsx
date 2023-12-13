@@ -9,36 +9,33 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { CountextData } from "../../../../../context/ContextData";
-import { useContext } from "react";
 import Icons from "../Icons";
 import ShowImage from "../ShowImage";
 import { useParams } from "react-router-dom";
+import * as postService from "../../../../../services/postService";
+import { useSharePost } from "../useSharePost";
 
 // SelectedPost component for displaying a single post in detail
 export const SelectedPost = () => {
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const [enlargedImage, setEnlargedImage] = useState(null);
-  const { postDetails } = useContext(CountextData); // Accessing post details from context
+  // const { postDetails } = useContext(CountextData); // Accessing post details from context
   const { username, postId } = useParams(); // Retrieving URL parameters
+  const [post, setPost] = useState([]);
+  const { handleShare } = useSharePost();
 
   useEffect(() => {
-    // Debugging: Logging postDetails
-    console.log(postDetails + " postDetails");
-  }, [username, postId, postDetails]);
-
-  // Function to handle post sharing using the Web Share API
-  const handleShare = async (title, text, url) => {
-    if (navigator.share) {
+    const fetchPost = async () => {
       try {
-        await navigator.share({ title, text, url });
+        const response = await postService.onePost(postId);
+        setPost(response);
       } catch (error) {
-        console.error("Error sharing:", error);
+        console.error("Error fetching posts:", error);
       }
-    } else {
-      alert("Web Share API is not supported in this browser.");
-    }
-  };
+    };
+
+    fetchPost();
+  }, [postId]);
 
   // Functions to manage image modal state
   const openImageModal = (image) => {
@@ -50,24 +47,14 @@ export const SelectedPost = () => {
     setImageModalOpen(false);
   };
 
-  // Finding the specific post using the username and postId from the URL
-  const selectedPost = postDetails.find(
-    (post) => post.userName === username && post.id == postId
-  );
-
-  if (!selectedPost) {
-    // Handling the case where the post is not found
-    return <div>Post not found</div>;
-  }
-
   return (
     <Box flex={4} p={2}>
-      <Card sx={{ marginRight: 2, marginLeft: 0, marginBottom: 5 }}>
+      <Card sx={{ mt: 8, mr: "16px" }}>
         {/* Card Header with user avatar and more options icon */}
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
-              R
+              {post?.user?.userName.charAt(0).toUpperCase()}
             </Avatar>
           }
           action={
@@ -78,9 +65,9 @@ export const SelectedPost = () => {
           subheader={
             <Box>
               <Typography variant="h6" component="div">
-                {selectedPost.userName}
+                {post?.user?.userName}
               </Typography>
-              {selectedPost.subheader}
+              {new Date(post.createdAt).toLocaleDateString()}
             </Box>
           }
         />
@@ -88,12 +75,12 @@ export const SelectedPost = () => {
         <Box component="span">
           <CardContent>
             <Typography variant="body2" color="text.secondary">
-              {selectedPost.text}
+              {post.text}
             </Typography>
           </CardContent>
-          {selectedPost.image && (
+          {post.imageUrl && (
             <ShowImage
-              image={selectedPost.image}
+              image={post.imageUrl}
               isImageModalOpen={isImageModalOpen}
               openImageModal={openImageModal}
               closeImageModal={closeImageModal}
@@ -104,11 +91,7 @@ export const SelectedPost = () => {
         {/* Icons for actions like sharing */}
         <Icons
           handleShare={() =>
-            handleShare(
-              selectedPost.userName,
-              selectedPost.text,
-              `post/${selectedPost.userName}/${selectedPost.id}`
-            )
+            handleShare(`/post/${post.user.userName}/${post._id}`)
           }
         />
       </Card>

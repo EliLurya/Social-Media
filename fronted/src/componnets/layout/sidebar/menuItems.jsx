@@ -6,7 +6,7 @@ export  const menuItems = [
     icon: <Search />,
     text: "Search",
   },
-  { icon: <PostAdd />, text: "New post", href: "/newPost" },
+  { icon: <PostAdd />, text: "My Posts", href: "/newPost" },
   {
     icon: <CircleNotifications />,
     text: "Notifications",

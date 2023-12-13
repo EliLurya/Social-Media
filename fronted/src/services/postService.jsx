@@ -13,3 +13,16 @@ export const feedPosts = async () => {
     method: OptionsUrl.allPosts.method,
   });
 };
+
+export const onePost = async (postId) => {
+  return sendRequest(OptionsUrl.getPost.url, {
+    method: OptionsUrl.getPost.method,
+    body: { id: postId },
+  });
+};
+
+export const userPosts = async () => {
+  return sendRequest(OptionsUrl.userPosts.url, {
+    method: OptionsUrl.userPosts.method,
+  });
+};

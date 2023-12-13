@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MoreVert } from "@mui/icons-material";
 import {
   Avatar,
@@ -15,18 +15,21 @@ import { Link as RouterLink } from "react-router-dom";
 import Icons from "../Icons";
 import ShowImage from "../ShowImage";
 import * as postService from "../../../../../services/postService";
-export const Post = () => {
+import { CountextData } from "../../../../../context/ContextData";
+import { useSharePost } from "../useSharePost";
+export const Post = ({ fetchPostsFunction }) => {
   const [posts, setPosts] = useState([]);
 
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const [enlargedImage, setEnlargedImage] = useState(null);
-  // const { allPosts } = useContext(CountextData); // Using context to access post details
+  const { setPostDetails, allPosts } = useContext(CountextData);
+  const { handleShare } = useSharePost();
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await postService.feedPosts();
-        console.log(response + "dddddddddd");
+        const response = await fetchPostsFunction();
+        console.log(response);
         setPosts(response);
       } catch (error) {
         console.error("Error fetching posts:", error);
@@ -34,25 +37,10 @@ export const Post = () => {
     };
 
     fetchPosts();
-  }, []);
+  }, [fetchPostsFunction]);
 
-  // Function to handle post sharing using the Web Share API
-  const handleShare = async (title, text, userName, id) => {
-    if (navigator.share) {
-      try {
-        const shareData = {
-          title: title,
-          text: text,
-          url: `post/${userName}/${id}`,
-        };
-        await navigator.share(shareData);
-      } catch (error) {
-        console.error("Error sharing:", error);
-      }
-    } else {
-      // Fallback if Web Share API is not supported
-      alert("Web Share API is not supported in this browser.");
-    }
+  const hendleClickPost = (post) => {
+    setPostDetails(post);
   };
 
   // Functions to handle image modal opening and closing
@@ -76,19 +64,21 @@ export const Post = () => {
           mr: "1.1rem",
         }}
       ></Divider>
-      {posts.map((post, index) => (
+      {posts.map((post) => (
         <Box
           key={post._id}
           sx={{
             margin: "10px 1.1rem 1px 0.1rem",
             // border: "0.1px solid #EEE5F1",
+            mr: "16px",
             borderRadius: 1,
           }}
         >
           <CardHeader
             avatar={
               <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
-                R
+                {post.user.userName.charAt(0).toUpperCase()}
+                {/* Add here pofile photo if exist */}
               </Avatar>
             }
             action={
@@ -103,8 +93,9 @@ export const Post = () => {
             <Link
               key={post._id}
               component={RouterLink}
-              to={`/post/${post.user.userName}/${post.id}`}
+              to={`/post/${post.user.userName}/${post._id}`}
               underline="none"
+              onClick={() => hendleClickPost(post)}
             >
               <CardContent>
                 <Typography variant="body2" color="text.secondary">
@@ -123,8 +114,8 @@ export const Post = () => {
             </Link>
           </Box>
           <Icons
-            handleShare={(title, text) =>
-              handleShare(title, text, post.user.userName, post.id)
+            handleShare={() =>
+              handleShare(`/post/${post.user.userName}/${post._id}`)
             }
           />
           <Divider

@@ -16,5 +16,4 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase Storage and get a reference to the service
 const storage = getStorage(app);
-console.log(storage);
 export { storage };

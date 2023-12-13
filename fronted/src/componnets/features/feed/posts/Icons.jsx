@@ -35,8 +35,8 @@ function Icons({ handleShare }) {
         onClick={() => {
           // Handle share action
           handleShare(
-            postDetails.subheader,
-            postDetails.text,
+            // postDetails.userName,
+            // postDetails.text,
             window.location.href // URL of the current page
           );
         }}

@@ -2,6 +2,7 @@ import express, { Request, Response, Router } from "express";
 import UserModel from "../../models/userSchema";
 import { authentication } from "../../middleware/authMiddleware";
 import { User } from "../../types/userTypes";
+import PostModel from "../../models/postSchema";
 
 const router: Router = express.Router();
 
@@ -12,13 +13,18 @@ router.get(
   async (req: Request, res: Response) => {
     const id: string = req.user.userId; // Get user ID from authenticated request
     try {
-      // Find the user by ID in the database and populate the "posts" field
-      const user = await UserModel.findOne({ _id: id }).populate("posts");
-      if (user) {
-        res.json({ success: true, data: user.posts });
+      // Find all posts by the user ID and populate the "user" field
+      const posts = await PostModel.find({ user: id }) // Filter posts by user ID
+        .populate("user", "userName") // Populate the "user" field
+        .sort({ createdAt: -1 }); // Sort by creation date
+
+      if (posts.length > 0) {
+        res.json(posts);
       } else {
-        // Respond with error if user is not found
-        res.status(404).json({ success: false, error: "User not found" });
+        // Respond with an error or a message if no posts are found
+        res
+          .status(404)
+          .json({ success: false, error: "No posts found for this user" });
       }
     } catch (error) {
       console.error("Error fetching user posts:", error);

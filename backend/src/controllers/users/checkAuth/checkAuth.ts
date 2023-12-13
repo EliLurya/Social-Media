@@ -8,11 +8,9 @@ const router: Router = express.Router();
 router.get("/check-auth", (req: Request, res: Response) => {
   const token = req.cookies.token; // Retrieve the token from the cookie
   
-  if (!token) {
-    return
-    
-  //   res.status(401).json({ success: false, message: "Not authenticated" });
-  //   return;
+  if (!token) {    
+    res.status(401).json({ success: false, message: "Not authenticated" });
+    return;
    }
 
   jwt.verify(token, process.env.YOUR_SECRET_KEY, async (err: any, decodedToken: { userId: any; }) => {

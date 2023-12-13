@@ -3,18 +3,22 @@ import { useAuth } from "../context/AuthContext";
 import { ROUTES } from "../utils/routes";
 
 const ProtectedRoute = ({ children, ...rest }) => {
-  const { signInSuccessful } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div></div>;
+  }
 
   return (
     <Route
       {...rest}
       render={({ location }) =>
-        signInSuccessful ? (
+        isAuthenticated ? (
           children
         ) : (
           <Navigate
             to={{
-              pathname: ROUTES.SIGN,
+              pathname: "/signin",
               state: { from: location },
             }}
           />
@@ -23,5 +27,6 @@ const ProtectedRoute = ({ children, ...rest }) => {
     />
   );
 };
+
 
 export default ProtectedRoute;

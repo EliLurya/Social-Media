@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Container, Stack } from "@mui/material";
 import RigthBar from "./componnets/layout/rightBar/RigthBar";
 import Sidebar from "./componnets/layout/sidebar/Sidebar";
 import Navbar from "./componnets/layout/navbar/Navbar";
@@ -11,9 +11,13 @@ import { lightTheme, darkTheme } from "./theme/index";
 import { ThemeProvider } from "@mui/material/styles";
 function App() {
   const [openSearch, setOpenSearch] = useState(false);
-  const { signInSuccessful } = useAuth();
+const { signInSuccessful, isLoading } = useAuth();
   const [darkMode, setDarkMode] = useState(true);
-
+  
+  
+  if (isLoading) {
+    return <div>Loading...</div>; 
+  }
   // Function to toggle dark mode
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);

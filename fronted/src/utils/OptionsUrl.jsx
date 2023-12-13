@@ -44,4 +44,12 @@ export const OptionsUrl = {
     url: "/user/action/feed",
     method: options.GET,
   },
+  getPost: {
+    url: "/user/action/getPost",
+    method: options.POST,
+  },
+  userPosts: {
+    url: "/user/action/posts",
+    method: options.GET,
+  },
 };

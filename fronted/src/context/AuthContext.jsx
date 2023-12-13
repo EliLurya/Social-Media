@@ -12,22 +12,21 @@ export default function AuthProvider({ children }) {
   const [signInSuccessful, setSignInSuccessful] = useState(false);
   const [signUpCodeReq, setSignUpCodeReq] = useState(false);
   const [dataSignUp, setDataSignUp] = useState("");
-  useEffect(() => {
-    const verifyUser = async () => {
-      try {
-        const response = await userService.checkAuth();
-        if (response.success) {
-          setSignInSuccessful(true);
-        } else {
-          setSignInSuccessful(false);
-        }
-      } catch (error) {
-        console.error("Auth check failed:", error);
-        setSignInSuccessful(false);
-      }
-    };
-    verifyUser();
-  }, []);
+  const [isLoading, setIsLoading] = useState(true);
+
+ useEffect(() => {
+   const verifyUser = async () => {
+     try {
+       const response = await userService.checkAuth();
+       setSignInSuccessful(response.success);
+     } catch (error) {
+       setSignInSuccessful(false);
+     }
+     setIsLoading(false);
+   };
+   verifyUser();
+ }, []);
+
 
   // Function to handle user sign-up
   const signUp = async (credentials) => {
@@ -110,6 +109,7 @@ export default function AuthProvider({ children }) {
         handleLoginSuccessGoogle,
         dataSignUp,
         setSignUpCodeReq,
+        isLoading,
       }}
     >
       {children}
