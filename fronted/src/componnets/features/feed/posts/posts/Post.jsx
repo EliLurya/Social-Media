@@ -11,39 +11,74 @@ import {
 } from "@mui/material";
 import Link from "@mui/material/Link";
 import { Link as RouterLink } from "react-router-dom";
-
 import Icons from "../Icons";
 import ShowImage from "../ShowImage";
-import * as postService from "../../../../../services/postService";
 import { CountextData } from "../../../../../context/ContextData";
 import { useSharePost } from "../useSharePost";
-export const Post = ({ fetchPostsFunction }) => {
-  const [posts, setPosts] = useState([]);
 
+/**
+ * Component to render a list of posts.
+ * Supports infinite scrolling by fetching more posts as the user scrolls down.
+ * @param {Function} fetchPostsFunction - Function to fetch posts.
+ */
+export const Post = ({ fetchPostsFunction }) => {
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const [enlargedImage, setEnlargedImage] = useState(null);
-  const { setPostDetails, allPosts } = useContext(CountextData);
+  const { setPostDetails } = useContext(CountextData);
   const { handleShare } = useSharePost();
+  const [posts, setPosts] = useState([]);
+  const [lastPostId, setLastPostId] = useState(null);
+  const [hasMorePosts, setHasMorePosts] = useState(true);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await fetchPostsFunction();
-        console.log(response);
-        setPosts(response);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
+  /**
+   * Loads more posts when called. It fetches posts after the last loaded post.
+   */
+  const loadMorePosts = async () => {
+    if (!hasMorePosts) return;
+
+    try {
+      const newPosts = (await fetchPostsFunction(lastPostId)) || [];
+      // Check if newPosts is not an array (which can happen if logged out and a token error occurs)
+      // or if newPosts is an empty array (meaning no more posts to load)
+      if (!Array.isArray(newPosts) || newPosts.length === 0) {
+        setHasMorePosts(false);
+        return;
       }
-    };
+      setPosts([...posts, ...newPosts]);
+      setLastPostId(newPosts[newPosts.length - 1]._id);
+    } catch (error) {
+      console.error("Error fetching more posts:", error);
+    }
+  };
 
-    fetchPosts();
+  // Load initial posts on component mount
+  useEffect(() => {
+    loadMorePosts();
   }, [fetchPostsFunction]);
 
+  // Attach scroll event listener for infinite scrolling
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop !==
+        document.documentElement.offsetHeight
+      )
+        return;
+      loadMorePosts();
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [posts, hasMorePosts]);
+
+  /**
+   * Handles click event on a post to set details for viewing or further interaction.
+   * @param {Object} post - The post object to set details for.
+   */
   const hendleClickPost = (post) => {
     setPostDetails(post);
   };
 
-  // Functions to handle image modal opening and closing
+  // Functions to manage the state of the image modal
   const openImageModal = (image) => {
     setEnlargedImage(image);
     setImageModalOpen(true);
@@ -63,22 +98,16 @@ export const Post = ({ fetchPostsFunction }) => {
           borderBottomWidth: "1.5px",
           mr: "1.1rem",
         }}
-      ></Divider>
+      />
       {posts.map((post) => (
         <Box
           key={post._id}
-          sx={{
-            margin: "10px 1.1rem 1px 0.1rem",
-            // border: "0.1px solid #EEE5F1",
-            mr: "16px",
-            borderRadius: 1,
-          }}
+          sx={{ margin: "10px 1.1rem 1px 0.1rem", mr: "16px", borderRadius: 1 }}
         >
           <CardHeader
             avatar={
-              <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
+              <Avatar sx={{ bgcolor: "red" }}>
                 {post.user.userName.charAt(0).toUpperCase()}
-                {/* Add here pofile photo if exist */}
               </Avatar>
             }
             action={
@@ -87,11 +116,10 @@ export const Post = ({ fetchPostsFunction }) => {
               </IconButton>
             }
             title={post.user.userName}
-            subheader={new Date(post.createdAt).toLocaleDateString()} // format date as needed
+            subheader={new Date(post.createdAt).toLocaleDateString()}
           />
           <Box component="span">
             <Link
-              key={post._id}
               component={RouterLink}
               to={`/post/${post.user.userName}/${post._id}`}
               underline="none"
@@ -123,7 +151,7 @@ export const Post = ({ fetchPostsFunction }) => {
               bgcolor: (theme) => theme.palette.text.secondary,
               borderBottomWidth: "1.5px",
             }}
-          ></Divider>
+          />
         </Box>
       ))}
     </>

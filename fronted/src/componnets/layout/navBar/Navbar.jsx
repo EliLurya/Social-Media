@@ -12,14 +12,15 @@ import {
 import { Mail, Notifications } from "@mui/icons-material";
 import { useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
-import { useLocation, useNavigate, Link as RouterLink } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import logo from "../../../assets/images/picsvg_download22.svg";
 import "./NavBar.css";
 import useResponsive from "../../../utils/useResponsive";
 import MenuSideBar from "../sidebar/MenuSidebar";
 import { getFlexStyles } from "../../common/style/CommonStyles";
 import { ROUTES } from "../../../utils/routes";
-
+import Brightness4OutlinedIcon from "@mui/icons-material/Brightness4Outlined";
+import LightModeTwoToneIcon from "@mui/icons-material/LightModeTwoTone";
 // Styled component for the toolbar with flex layout
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -27,32 +28,27 @@ const StyledToolbar = styled(Toolbar)({
 });
 
 // Styled component for icons, responsive design with media queries
-const Icons = styled(Box)(({ theme }) => ({
-  display: "none",
+const Icons = styled(Box)(() => ({
+  display: "flex",
   columnGap: "20px",
   alignItems: "center",
-  [theme.breakpoints.up("md")]: {
-    // Show on medium screens and up
-    display: "flex",
-  },
 }));
 
-// Styled component for the user box, similar to Icons but with different breakpoints
-const UserBox = styled(Box)(({ theme }) => ({
-  display: "flex",
-  columnGap: "10px",
-  alignItems: "center",
-  [theme.breakpoints.up("md")]: {
-    display: "none", // Hide on medium screens and up
-  },
-}));
+// Styled vertical line component
+const VerticalDivider = styled(Box)({
+  height: '24px', 
+  width: '2px', 
+  backgroundColor: '#bdbdbd', 
+  alignSelf: 'center', 
+  margin: '0 12px', // Space around the divider
+});
 
-const NavBar = () => {
+const NavBar = ({ setDarkMode   }) => {
   const { signOut, signInSuccessful } = useAuth(); // Authentication context
   const navigate = useNavigate(); // Navigation hook
 
   const [anchorEl, setAnchorEl] = useState(null); // State for menu anchor
-
+  const [nightMode, setNightMode] = useState(false);
   const handleClick = (event) => {
     document.body.classList.add("bodyWithMenuOpen"); // Add class to body
     setAnchorEl(event.currentTarget); // Set menu anchor
@@ -73,10 +69,14 @@ const NavBar = () => {
     setAnchorEl(null); // Close menu
   };
 
+  const hendleMode =()=>{
+    setDarkMode((prevMode) => !prevMode);
+    setNightMode(!nightMode);
+  }
   return (
     <AppBar
       position="sticky"
-      sx={{ backgroundColor: "primary", width: "100%", minWidth:"100%" }}
+      sx={{ backgroundColor: "primary", width: "100%", minWidth: "100%" }}
     >
       <StyledToolbar>
         {matches || !signInSuccessful ? (
@@ -97,6 +97,20 @@ const NavBar = () => {
         {/* Icons and UserBox only shown when logged in */}
         {signInSuccessful && (
           <Icons>
+            {nightMode ? (
+              <Brightness4OutlinedIcon
+                sx={{ cursor: "pointer" }}
+                onClick={hendleMode}
+              />
+            ) : (
+              <LightModeTwoToneIcon
+                sx={{ cursor: "pointer" }}
+                onClick={hendleMode}
+              />
+            )}
+
+            <VerticalDivider />
+
             <Badge badgeContent={4} color="error">
               <Mail />
             </Badge>
@@ -109,14 +123,6 @@ const NavBar = () => {
               onClick={handleClick}
             />
           </Icons>
-        )}
-        {signInSuccessful && (
-          <UserBox onClick={handleClick}>
-            <Avatar
-              sx={{ width: 30, height: 30 }}
-              src="https://media-cdn.tripadvisor.com/media/photo-s/01/2b/24/bf/view-out-to-see-from.jpg"
-            />
-          </UserBox>
         )}
       </StyledToolbar>
       {/* User menu */}

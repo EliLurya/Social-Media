@@ -18,10 +18,6 @@ const { signInSuccessful, isLoading } = useAuth();
   if (isLoading) {
     return <div>Loading...</div>; 
   }
-  // Function to toggle dark mode
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
   return (
     <Box>
       <Box>
@@ -35,7 +31,11 @@ const { signInSuccessful, isLoading } = useAuth();
           </ThemeProvider>
         ) : (
           <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-            <Navbar className="a" openSearch={openSearch}></Navbar>
+            <Navbar
+              className="a"
+              openSearch={openSearch}
+              setDarkMode={setDarkMode}
+            ></Navbar>
             <Box
               sx={{
                 bgcolor: (theme) => theme.palette.background.default,

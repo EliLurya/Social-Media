@@ -41,7 +41,7 @@ const ShowImage = ({
           height="20%"
           image={image}
           alt="Image"
-          sx={{ maxWidth: "400px" }} // Set a maximum width for the image
+          sx={{ maxWidth: "400px", }} // Set a maximum width for the image
         />
       </Button>
 

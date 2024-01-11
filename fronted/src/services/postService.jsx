@@ -8,11 +8,13 @@ export const createPost = async (postData) => {
   });
 };
 
-export const feedPosts = async () => {
-  return sendRequest(OptionsUrl.allPosts.url, {
+export const feedPosts = async (lastPostId = null) => {
+  const queryParams = lastPostId ? `?lastPostId=${lastPostId}` : "";
+  return sendRequest(`${OptionsUrl.allPosts.url}${queryParams}`, {
     method: OptionsUrl.allPosts.method,
   });
 };
+
 
 export const onePost = async (postId) => {
   return sendRequest(OptionsUrl.getPost.url, {
@@ -21,8 +23,9 @@ export const onePost = async (postId) => {
   });
 };
 
-export const userPosts = async () => {
-  return sendRequest(OptionsUrl.userPosts.url, {
+export const userPosts = async (lastPostId = null) => {
+  const queryParams = lastPostId ? `?lastPostId=${lastPostId}` : "";
+  return sendRequest(`${OptionsUrl.userPosts.url}${queryParams}`, {
     method: OptionsUrl.userPosts.method,
   });
 };

@@ -14,6 +14,7 @@ import ShowImage from "../ShowImage";
 import { useParams } from "react-router-dom";
 import * as postService from "../../../../../services/postService";
 import { useSharePost } from "../useSharePost";
+import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";import { useNavigate } from "react-router-dom";
 
 // SelectedPost component for displaying a single post in detail
 export const SelectedPost = () => {
@@ -23,6 +24,7 @@ export const SelectedPost = () => {
   const { username, postId } = useParams(); // Retrieving URL parameters
   const [post, setPost] = useState([]);
   const { handleShare } = useSharePost();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -47,8 +49,13 @@ export const SelectedPost = () => {
     setImageModalOpen(false);
   };
 
+    const handleBackClick = () => {
+      navigate(-1); // This will navigate back to the previous page
+    };
+
+    
   return (
-    <Box flex={4} p={2}>
+    <Box flex={4} p={0}>
       <Card sx={{ mt: 8, mr: "16px" }}>
         {/* Card Header with user avatar and more options icon */}
         <CardHeader
@@ -58,8 +65,8 @@ export const SelectedPost = () => {
             </Avatar>
           }
           action={
-            <IconButton aria-label="settings">
-              <MoreVert />
+            <IconButton onClick={handleBackClick}>
+              <ArrowCircleRightOutlinedIcon sx={{ color: "text.secondary" }} />
             </IconButton>
           }
           subheader={
