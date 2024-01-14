@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { authentication } from "../../middleware/authMiddleware";
-import PostModel from "../../models/postSchema"; // Assuming PostModel is the Mongoose model for posts
+import PostModel from "../../models/postSchema";
+import mongoose from "mongoose";
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ router.get(
   async (req: Request, res: Response) => {
     // Parse 'limit' from query parameters or default to 10
     const limit: number = parseInt(req.query.limit as string) || 10;
-
+     const userId: string = req.user.userId;
     // Parse 'lastPostId' from query parameters; it may be undefined
     const lastPostId: string | undefined = req.query.lastPostId as string;
 
@@ -33,8 +34,18 @@ router.get(
         .sort({ createdAt: -1 })
         .limit(limit);
 
+      const postsWithLikeStatus = posts.map((post) => {
+        // Convert ObjectId to string for comparison
+        const userLiked = post.idPeopleThatLike
+          .map((id) => id.toString())
+          .includes(userId);
+        return {
+          ...post.toObject(),
+          userLiked,
+        };
+      });      
       // Send the fetched posts as a response
-      res.json(posts);
+      res.json(postsWithLikeStatus);
     } catch (error) {
       // Handle any errors during the database query
       console.error("Error fetching posts:", error);

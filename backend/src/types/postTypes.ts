@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { Comment } from "./commentTypes"; // Assuming you move Comment to its own file
-import { LikeEntry } from "./likeEntryTypes"; // Assuming you move LikeEntry to its own file
+import { Comment } from "./commentTypes"; 
+import { LikeEntry } from "./likeEntryTypes"; 
 
 export interface Post {
   _id: mongoose.Types.ObjectId;

@@ -11,10 +11,10 @@ import {
 } from "@mui/material";
 import Link from "@mui/material/Link";
 import { Link as RouterLink } from "react-router-dom";
-import Icons from "../Icons";
+import Icons from "../icons/Icons";
 import ShowImage from "../ShowImage";
 import { CountextData } from "../../../../../context/ContextData";
-import { useSharePost } from "../useSharePost";
+import { useSharePost } from "../icons/useSharePost";
 
 /**
  * Component to render a list of posts.
@@ -89,7 +89,6 @@ export const Post = ({ fetchPostsFunction }) => {
     image.stopPropagation();
     setImageModalOpen(false);
   };
-
   return (
     <>
       <Divider
@@ -145,6 +144,7 @@ export const Post = ({ fetchPostsFunction }) => {
             handleShare={() =>
               handleShare(`/post/${post.user.userName}/${post._id}`)
             }
+            post={post}
           />
           <Divider
             sx={{

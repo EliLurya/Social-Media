@@ -15,7 +15,6 @@ export const feedPosts = async (lastPostId = null) => {
   });
 };
 
-
 export const onePost = async (postId) => {
   return sendRequest(OptionsUrl.getPost.url, {
     method: OptionsUrl.getPost.method,
@@ -27,5 +26,12 @@ export const userPosts = async (lastPostId = null) => {
   const queryParams = lastPostId ? `?lastPostId=${lastPostId}` : "";
   return sendRequest(`${OptionsUrl.userPosts.url}${queryParams}`, {
     method: OptionsUrl.userPosts.method,
+  });
+};
+export const controlLikes = async (post, like, postId) => {
+  const queryParams = postId ? `${postId}` : "";
+  return sendRequest(`${OptionsUrl.addOrRemovelLikes.url}${queryParams}`, {
+    method: OptionsUrl.addOrRemovelLikes.method,
+    body: { like: like },
   });
 };

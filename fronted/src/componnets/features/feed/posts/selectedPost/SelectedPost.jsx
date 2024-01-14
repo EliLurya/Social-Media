@@ -9,11 +9,11 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import Icons from "../Icons";
+import Icons from "../icons/Icons";
 import ShowImage from "../ShowImage";
 import { useParams } from "react-router-dom";
 import * as postService from "../../../../../services/postService";
-import { useSharePost } from "../useSharePost";
+import { useSharePost } from "../icons/useSharePost";
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";import { useNavigate } from "react-router-dom";
 
 // SelectedPost component for displaying a single post in detail
@@ -100,6 +100,7 @@ export const SelectedPost = () => {
           handleShare={() =>
             handleShare(`/post/${post.user.userName}/${post._id}`)
           }
+          postId={post._id}
         />
       </Card>
     </Box>

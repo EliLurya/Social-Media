@@ -1,7 +1,8 @@
 const options = {
-  GET : "GET",
-  POST : "POST",
-}
+  GET: "GET",
+  POST: "POST",
+  PUT:"PUT"
+};
 
 export const OptionsUrl = {
   signUp: {
@@ -51,5 +52,9 @@ export const OptionsUrl = {
   userPosts: {
     url: "/user/action/posts",
     method: options.GET,
+  },
+  addOrRemovelLikes: {
+    url: "/user/action/updatePost/",
+    method: options.PUT,
   },
 };

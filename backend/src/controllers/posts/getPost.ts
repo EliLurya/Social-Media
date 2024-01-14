@@ -12,11 +12,10 @@ router.post(
   authentication("user"),
   async (req: Request, res: Response) => {
     const { id } = req.body;
-    console.log(id);
 
     if (!id) {
       res
-        .status(400)
+        .status(404)
         .json({ success: false, error: "Send to the body ID post" });
       return;
     }
@@ -24,11 +23,10 @@ router.post(
       "user",
       "userName",
     );
-    if (!id) {
+    if (!findPost) {
       return res.status(404).json({ success: false, error: "post not found" });
     }
-    console.log(findPost);
-
+    
     res.json(findPost);
   }
 );
