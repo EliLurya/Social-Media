@@ -1,7 +1,5 @@
 import express, { Request, Response, Router } from "express";
 import { authentication } from "../../middleware/authMiddleware";
-import mongoose from "mongoose";
-import { Post } from "../../types/postTypes";
 
 const body_parser = require("body-parser");
 const jsonParser = body_parser.json();
@@ -12,15 +10,13 @@ const router: Router = express.Router();
 router.put(
   "/updatePost/:postId",
   jsonParser,
-  authentication("user"), // Apply authentication middleware
+  authentication("user"),
   async (req: Request, res: Response) => {
+    const userId = req.user.userId;
+    const postId = req.params.postId;
+    const { post: postData, like } = req.body;
 
-    const userId: any = req.user.userId; // Get user ID from authenticated request
-    const postId: string = req.params.postId;
-
-    const { post, like } = req.body;
-
-    if (!post && !like) {
+    if (!postData && !like) {
       res.status(400).json({
         success: false,
         error: "Send to the body update post or update like",
@@ -29,19 +25,16 @@ router.put(
     }
     try {
       // Find the post to be updated by ID
-      const postToUpdate = (await PostModel.findOne({
-        _id: postId,
-      })) as mongoose.Document & Post;
-
+      const postToUpdate = await PostModel.findOne({ _id: postId });
       if (!postToUpdate) {
         return res
           .status(404)
           .json({ success: false, error: "Post not found" });
       }
-      // Determine the index of userId in idPeopleThatLike
-      const index = postToUpdate.idPeopleThatLike.indexOf(userId);
+
       // Handle like/unlike functionality
       if (like !== undefined) {
+        const index = postToUpdate.idPeopleThatLike.indexOf(userId);
         const update =
           index > -1
             ? { $pull: { idPeopleThatLike: userId }, $inc: { likes: -1 } }
@@ -61,23 +54,21 @@ router.put(
           data: updatedPost,
           userLiked: updatedPost.idPeopleThatLike.includes(userId),
         });
-        
         return;
       }
 
       // Update post content
-      if (req.body.post) {
-        const updatedPost = await PostModel.findOneAndUpdate(
-          { _id: postId },
-          { post: req.body.post },
+      if (postData) {
+        const updatedPost = await PostModel.findByIdAndUpdate(
+          postId,
+          { $set: postData },
           { new: true }
         );
-        res.json({
+        return res.json({
           success: true,
           message: "Post updated successfully",
           data: updatedPost,
         });
-        return;
       }
 
       res.status(400).json({ success: false, error: "No action performed" });

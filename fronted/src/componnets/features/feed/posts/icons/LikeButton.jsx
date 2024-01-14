@@ -46,8 +46,6 @@ const LikeButton = ({ post }) => {
       console.error("Error updating like:", error);
     }
   };
-console.log("isLiked state:", isLiked);
-
   return (
     <IconButton aria-label="add to favorites" onClick={handleLikeClick}>
       {isLiked ? (

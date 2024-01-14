@@ -3,6 +3,7 @@ import { MoreVert } from "@mui/icons-material";
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardContent,
   CardHeader,
@@ -14,16 +15,18 @@ import ShowImage from "../ShowImage";
 import { useParams } from "react-router-dom";
 import * as postService from "../../../../../services/postService";
 import { useSharePost } from "../icons/useSharePost";
-import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import TopIcons from "./TopIcons";
+import Add from "../../../newPost/add/Add";
 
 // SelectedPost component for displaying a single post in detail
 export const SelectedPost = () => {
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const [enlargedImage, setEnlargedImage] = useState(null);
-  // const { postDetails } = useContext(CountextData); // Accessing post details from context
-  const { username, postId } = useParams(); // Retrieving URL parameters
-  const [post, setPost] = useState([]);
+  const { postId } = useParams(); // Retrieving URL parameters
+  const [post, setPost] = useState({});
   const { handleShare } = useSharePost();
+  const [postUpdate, setPostupdate] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,13 +35,18 @@ export const SelectedPost = () => {
         const response = await postService.onePost(postId);
         setPost(response);
       } catch (error) {
-        console.error("Error fetching posts:", error);
+        console.error("Error fetching post:", error);
       }
     };
 
-    fetchPost();
-  }, [postId]);
+    if (postId) {
+      fetchPost();
+    } else {
+      console.log("No postId found");
+    }
+  }, [postId, postUpdate]);
 
+  console.log(post);
   // Functions to manage image modal state
   const openImageModal = (image) => {
     setEnlargedImage(image);
@@ -49,60 +57,87 @@ export const SelectedPost = () => {
     setImageModalOpen(false);
   };
 
-    const handleBackClick = () => {
-      navigate(-1); // This will navigate back to the previous page
-    };
+  const handleBackClick = () => {
+    navigate(-1); // This will navigate back to the previous page
+  };
 
-    
+   const onPostUpdated = () => {
+     setPostupdate(false);
+     // fetchPost();
+   };
   return (
     <Box flex={4} p={0}>
-      <Card sx={{ mt: 8, mr: "16px" }}>
-        {/* Card Header with user avatar and more options icon */}
-        <CardHeader
-          avatar={
-            <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
-              {post?.user?.userName.charAt(0).toUpperCase()}
-            </Avatar>
-          }
-          action={
-            <IconButton onClick={handleBackClick}>
-              <ArrowCircleRightOutlinedIcon sx={{ color: "text.secondary" }} />
-            </IconButton>
-          }
-          subheader={
-            <Box>
-              <Typography variant="h6" component="div">
-                {post?.user?.userName}
+      <TopIcons
+        handleBackClick={handleBackClick}
+        setPostupdate={setPostupdate}
+      ></TopIcons>
+      {postUpdate ? (
+        <Box sx={{ mt: 6, mr: 1 }}>
+          <Add
+            updateText={post.text}
+            updateImage={post.imageUrl}
+            postId={post._id}
+            onPostUpdated={onPostUpdated}
+          ></Add>
+        </Box>
+      ) : (
+        <Card sx={{ mt: 4, mr: "16px" }}>
+          {/* Card Header with user avatar and more options icon */}
+
+          <CardHeader
+            avatar={
+              <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
+                {post?.user?.userName.charAt(0).toUpperCase()}
+              </Avatar>
+            }
+            subheader={
+              <Box>
+                <Typography variant="h6" component="div">
+                  {post?.user?.userName}
+                </Typography>
+                {new Date(post.createdAt).toLocaleDateString()}
+              </Box>
+            }
+          />
+          {/* Post content */}
+          <Box component="span">
+            <CardContent>
+              <Typography variant="body2" color="text.secondary">
+                {post.text}
               </Typography>
-              {new Date(post.createdAt).toLocaleDateString()}
-            </Box>
-          }
-        />
-        {/* Post content */}
-        <Box component="span">
-          <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              {post.text}
-            </Typography>
-          </CardContent>
-          {post.imageUrl && (
-            <ShowImage
-              image={post.imageUrl}
-              isImageModalOpen={isImageModalOpen}
-              openImageModal={openImageModal}
-              closeImageModal={closeImageModal}
-              enlargedImage={enlargedImage}
+            </CardContent>
+            {post.imageUrl && (
+              <ShowImage
+                image={post.imageUrl}
+                isImageModalOpen={isImageModalOpen}
+                openImageModal={openImageModal}
+                closeImageModal={closeImageModal}
+                enlargedImage={enlargedImage}
+              />
+            )}
+          </Box>
+          {/* Icons for actions like sharing */}
+          {post && post._id && (
+            <Icons
+              handleShare={() =>
+                handleShare(`/post/${post.user.userName}/${post._id}`)
+              }
+              post={post}
             />
           )}
+        </Card>
+      )}
+      {postUpdate && (
+        <Box display="flex" justifyContent="center">
+          <Button
+            variant="contained"
+            sx={{ mt: 3 }}
+            onClick={() => setPostupdate(false)}
+          >
+            Cancel
+          </Button>
         </Box>
-        {/* Icons for actions like sharing */}
-        <Icons
-          handleShare={() =>
-            handleShare(`/post/${post.user.userName}/${post._id}`)
-          }
-          postId={post._id}
-        />
-      </Card>
+      )}
     </Box>
   );
 };

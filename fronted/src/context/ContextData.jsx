@@ -4,14 +4,24 @@ export const CountextData = createContext();
 import * as postService from "../services/postService";
 
 function CountextDataProvider({ children }) {
-
   const [postDetails, setPostDetails] = useState([]);
 
   // Function to create a new post
   const createPost = async (postData) => {
-    console.log(typeof postData);
     try {
       const response = await postService.createPost(postData);
+      if (!response.success) {
+        console.error("Failed to create post:", response.error);
+        return;
+      }
+    } catch (error) {
+      console.error("Error creating post:", error);
+    }
+  };
+
+  const updatePost = async (postData, postId) => {
+    try {
+      const response = await postService.updatePost(postData, "", postId);
       if (!response.success) {
         console.error("Failed to create post:", response.error);
         return;
@@ -26,7 +36,7 @@ function CountextDataProvider({ children }) {
       const response = await postService.feedPosts();
       console.log(response);
       console.log(typeof response);
-      return response
+      return response;
     } catch (error) {
       console.error("Error creating post:", error);
     }
@@ -34,7 +44,7 @@ function CountextDataProvider({ children }) {
 
   return (
     <CountextData.Provider
-      value={{ postDetails, createPost, allPosts, setPostDetails }}
+      value={{ postDetails, createPost, allPosts, setPostDetails, updatePost }}
     >
       {children}
     </CountextData.Provider>

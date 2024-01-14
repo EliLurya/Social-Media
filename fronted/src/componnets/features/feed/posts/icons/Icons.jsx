@@ -4,6 +4,9 @@ import LikeButton from "./LikeButton";
 
 // Icons component for handling actions liking 
 function Icons({ handleShare, post }) {
+        console.log(post.likes);
+                console.log(post.userLikes);
+
   return (
     <CardActions>
       {/* Comment Icon */}

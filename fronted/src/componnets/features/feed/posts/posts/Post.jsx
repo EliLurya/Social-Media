@@ -15,6 +15,8 @@ import Icons from "../icons/Icons";
 import ShowImage from "../ShowImage";
 import { CountextData } from "../../../../../context/ContextData";
 import { useSharePost } from "../icons/useSharePost";
+import { getFlexStyles } from "../../../../common/style/CommonStyles";
+import UpdateAndRemove from "../selectedPost/updateAndRemove/UpdateAndRemove";
 
 /**
  * Component to render a list of posts.
@@ -117,6 +119,7 @@ export const Post = ({ fetchPostsFunction }) => {
             title={post.user.userName}
             subheader={new Date(post.createdAt).toLocaleDateString()}
           />
+
           <Box component="span">
             <Link
               component={RouterLink}

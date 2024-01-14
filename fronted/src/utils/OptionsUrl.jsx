@@ -57,4 +57,8 @@ export const OptionsUrl = {
     url: "/user/action/updatePost/",
     method: options.PUT,
   },
+  updatePost: {
+    url: "/user/action/updatePost/",
+    method: options.PUT,
+  },
 };

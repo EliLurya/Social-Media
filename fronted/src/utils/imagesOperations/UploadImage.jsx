@@ -3,7 +3,8 @@ import { storage } from "./Firebase-config";
 
 const uploadImage = (file, onProgress) => {
   return new Promise((resolve, reject) => {
-    const storageRef = ref(storage, `images/${encodeURIComponent(file.name)}`);
+    const uniqueFileName = `images/${Date.now()}-${file.name}`;
+    const storageRef = ref(storage, uniqueFileName);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(

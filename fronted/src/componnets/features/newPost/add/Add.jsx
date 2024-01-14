@@ -7,61 +7,30 @@ import ProgressBar from "../../../../utils/imagesOperations/ProgressBar";
 import PostInputField from "./PostInputField";
 import ImagePreview from "./ImagePreview";
 import AddOptions from "./AddOptions";
+import { deleteImageFirebase } from "../../../../utils/imagesOperations/deleteImageFirebase";
 
 // Add component for creating a new post
-const Add = () => {
-  const { createPost } = useContext(CountextData); // Get the addNewPost function from context
-  const [postText, setPostText] = useState(""); // State for post text
-  const [postImage, setPostImage] = useState(null); // State for post image
+const Add = (props) => {
+  const { updateText, updateImage, postId } = props;
+  const { createPost, updatePost } = useContext(CountextData); // Get the addNewPost function from context
+  const [postText, setPostText] = useState(updateText || "");
+  const [postImage, setPostImage] = useState(updateImage || "");
+  const [currentImageUrl, setCurrentImageUrl] = useState(updateImage || "");
+
   const [textInput, setTextInput] = useState(false); // State to track if input field has text or image
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [textOnly, setTextOnly] = useState(true);
-  // Handle changes in the text field
-  const handleTextChange = (e) => {
-    const inputText = e.target.value;
-    setTextInput(inputText.trim() !== "" || postImage != null);
-    setPostText(inputText);
-  };
+  const [isUpdateMode, setIsUpdateMode] = useState(false);
 
-  const handleSend = async () => {
-    try {
-      setIsUploading(true); // Start uploading
-      let imageUrl = "";
-
-      if (postImage) {
-        try {
-          setTextOnly(false);
-          const compressedImage = await compressImage(postImage);
-          imageUrl = await uploadImage(compressedImage, (progress) => {
-            setUploadProgress(progress); // Update the upload progress state
-          });
-        } catch (error) {
-          console.error("Error during image processing:", error);
-          setIsUploading(false); // End uploading in case of an error
-          setTextOnly(true);
-          return; // Exit the function if an error occurs
-        }
-      }
-      // Combine the post text and the uploaded image URL into one object
-      const completePostData = {
-        text: postText,
-        imageUrl: imageUrl,
-      };
-      // Send the post data to your server
-      await createPost(completePostData);
-      // Reset the form state after successful post creation
-      setPostText("");
-      setPostImage(null);
-      setTextInput(false);
-      setIsUploading(false);
-      setUploadProgress(0);
-      setTextOnly(true);
-    } catch (error) {
-      console.error("Error handling the send operation:", error);
-      setIsUploading(false); // End uploading in case of an error
-      setTextOnly(true);
-    }
+  // Function to reset form state
+  const resetFormState = () => {
+    setPostText("");
+    setPostImage(null);
+    setTextInput(false);
+    setIsUploading(false);
+    setUploadProgress(0);
+    setTextOnly(true);
   };
 
   // Function to handle emoji selection
@@ -70,10 +39,60 @@ const Add = () => {
     setTextInput(true);
   };
 
-  // Update text input state when post image changes
+  // Function to handle text changes
+  const handleTextChange = (e) => {
+    const inputText = e.target.value;
+    setTextInput(inputText.trim() !== "" || !!postImage);
+    setPostText(inputText);
+  };
+
+  // Function to handle sending the post (create or update)
+  const handleSend = async () => {
+    try {
+      setIsUploading(true);
+
+      let imageUrl = currentImageUrl;
+      if (postImage && postImage instanceof File) {
+        if (currentImageUrl && currentImageUrl !== postImage) {
+          await deleteImageFirebase(currentImageUrl);
+        }
+
+        const compressedImage = await compressImage(postImage);
+        imageUrl = await uploadImage(compressedImage, setUploadProgress);
+      }
+
+      const completePostData = { text: postText, imageUrl };
+      if (isUpdateMode) {
+        await updatePost(completePostData, postId);
+        setCurrentImageUrl(imageUrl);
+        props.onPostUpdated();
+      } else {
+        await createPost(completePostData);
+      }
+
+      resetFormState();
+    } catch (error) {
+      console.error("Error in handleSend:", error);
+      setIsUploading(false);
+    }
+  };
+
+  // Update states based on the post image changes
   useEffect(() => {
     handleTextChange({ target: { value: postText } });
   }, [postImage]);
+
+  // Determine if the component is in update mode
+  useEffect(() => {
+    setIsUpdateMode(!!(updateText || updateImage));
+    setPostText(updateText || "");
+    setPostImage(updateImage || "");
+  }, [updateText, updateImage]);
+
+  // Enable button based on the input state
+  useEffect(() => {
+    setTextInput(postText.trim() !== "" || !!postImage);
+  }, [postText, postImage]);
 
   return (
     <Stack
@@ -91,31 +110,19 @@ const Add = () => {
       noValidate
       autoComplete="off"
     >
-      {/* Text input field for post */}
-      <PostInputField
-        postText={postText}
-        handleTextChange={handleTextChange}
-      ></PostInputField>
-      {/* Display selected image with cancel option */}
-      <ImagePreview
-        postImage={postImage}
-        setPostImage={setPostImage}
-      ></ImagePreview>
-
+      <PostInputField postText={postText} handleTextChange={handleTextChange} />
+      <ImagePreview postImage={postImage} setPostImage={setPostImage} />
       <Stack direction="row" pt={0} justifyContent={"space-between"}>
-        {/* Options to add image and emoji */}
         <AddOptions
           setPostImage={setPostImage}
           handleEmojiSelect={handleEmojiSelect}
-        ></AddOptions>
-        {/* Send button */}
+        />
         <Button variant="contained" onClick={handleSend} disabled={!textInput}>
-          Send
+          {isUpdateMode ? "Update" : "Send"}
         </Button>
       </Stack>
-      {/* Progress bar */}
       {!textOnly && isUploading && (
-        <ProgressBar uploadProgress={uploadProgress}></ProgressBar>
+        <ProgressBar uploadProgress={uploadProgress} />
       )}
     </Stack>
   );

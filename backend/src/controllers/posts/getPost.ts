@@ -1,6 +1,5 @@
 import express, { Request, Response, Router } from "express";
 import { authentication } from "../../middleware/authMiddleware";
-import { Post } from "../../types/postTypes";
 const PostModel = require("../../models/postSchema");
 const router: Router = express.Router();
 const body_parser = require("body-parser");
@@ -11,7 +10,9 @@ router.post(
   jsonParser,
   authentication("user"),
   async (req: Request, res: Response) => {
+    const userId = req.user.userId; // Retrieve the user ID from the authenticated user
     const { id } = req.body;
+console.log("here");
 
     if (!id) {
       res
@@ -19,15 +20,27 @@ router.post(
         .json({ success: false, error: "Send to the body ID post" });
       return;
     }
-    const findPost: Post | null = await PostModel.findOne({ _id: id }).populate(
+
+    const findPost = await PostModel.findOne({ _id: id }).populate(
       "user",
-      "userName",
+      "userName"
     );
     if (!findPost) {
       return res.status(404).json({ success: false, error: "post not found" });
     }
+
+    // Determine if the user has liked the post
+    const userLiked = findPost.idPeopleThatLike.includes(userId);
+
+    // Prepare the response with like status and likes count
+    const postResponse = {
+      ...findPost.toObject(),
+      userLiked: userLiked,
+      likes: findPost.idPeopleThatLike.length, // Number of likes
+    };
     
-    res.json(findPost);
+    res.json(postResponse);
   }
 );
+
 export default router;

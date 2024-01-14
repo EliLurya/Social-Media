@@ -31,6 +31,7 @@ export async function sendRequest(url, options = {}) {
     }
 
     const responseBody = await response.text();
+    console.log(JSON.parse(responseBody));
     return JSON.parse(responseBody);
   } catch (error) {
     console.error("Request error:", error);

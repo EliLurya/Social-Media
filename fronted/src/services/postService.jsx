@@ -35,3 +35,11 @@ export const controlLikes = async (post, like, postId) => {
     body: { like: like },
   });
 };
+
+export const updatePost = async (postData, like, postId) => {
+  const queryParams = postId ? `${postId}` : "";
+  return sendRequest(`${OptionsUrl.updatePost.url}${queryParams}`, {
+    method: OptionsUrl.updatePost.method,
+    body: { post: postData },
+  });
+};
