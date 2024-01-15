@@ -22,7 +22,13 @@ export const SelectedPost = () => {
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const [enlargedImage, setEnlargedImage] = useState(null);
   const { postId } = useParams(); // Retrieving URL parameters
-  const [post, setPost] = useState({});
+const [post, setPost] = useState({
+  user: { userName: "" },
+  text: "",
+  imageUrl: "",
+  _id: "",
+  createdAt: new Date(),
+});
   const { handleShare } = useSharePost();
   const [postUpdate, setPostupdate] = useState(false);
   const [reqAuthorPost, setReqAuthorPost] = useState(false);

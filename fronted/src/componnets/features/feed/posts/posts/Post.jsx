@@ -116,7 +116,7 @@ export const Post = ({ fetchPostsFunction }) => {
                 <MoreVert />
               </IconButton>
             }
-            title={post.user.userName}
+            title={post?.user?.userName || ""}
             subheader={new Date(post.createdAt).toLocaleDateString()}
           />
 
