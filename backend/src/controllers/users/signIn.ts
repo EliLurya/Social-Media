@@ -48,10 +48,12 @@ router.post("/signin", jsonParser, async (req: Request, res: Response) => {
       }
     );
 
-    //Create firebase token
+    // Create Firebase token
     const firebaseToken = await admin
       .auth()
-      .createCustomToken(user._id.toString());
+      .createCustomToken(user._id.toString(), {
+        expiresIn: 8 * 60 * 60, // 8 hours in seconds
+      });
 
     // Set the token as an HTTP-only cookie
     res.cookie("token", token, {

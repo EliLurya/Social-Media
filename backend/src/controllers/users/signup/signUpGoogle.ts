@@ -52,10 +52,12 @@ router.post(
         maxAge: 8 * 3600000, // 8 hours in milliseconds
       });
 
-      //Create firebase token
+      // Create Firebase token
       const firebaseToken = await admin
         .auth()
-        .createCustomToken(user._id.toString());
+        .createCustomToken(user._id.toString(), {
+          expiresIn: 8 * 60 * 60, // 8 hours in seconds
+        });
 
       res.json({
         success: true,
