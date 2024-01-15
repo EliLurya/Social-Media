@@ -1,7 +1,8 @@
 const options = {
   GET: "GET",
   POST: "POST",
-  PUT:"PUT"
+  PUT:"PUT",
+  DELETE:"DELETE"
 };
 
 export const OptionsUrl = {
@@ -60,5 +61,9 @@ export const OptionsUrl = {
   updatePost: {
     url: "/user/action/updatePost/",
     method: options.PUT,
+  },
+  removePost: {
+    url: "/user/action//deletePost/",
+    method: options.DELETE,
   },
 };

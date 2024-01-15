@@ -10,36 +10,46 @@ router.post(
   jsonParser,
   authentication("user"),
   async (req: Request, res: Response) => {
-    const userId = req.user.userId; // Retrieve the user ID from the authenticated user
+    const userId = req.user.userId;
     const { id } = req.body;
-console.log("here");
 
     if (!id) {
-      res
-        .status(404)
-        .json({ success: false, error: "Send to the body ID post" });
-      return;
+      return res
+        .status(400)
+        .json({ success: false, error: "Post ID is required" });
     }
 
-    const findPost = await PostModel.findOne({ _id: id }).populate(
-      "user",
-      "userName"
-    );
-    if (!findPost) {
-      return res.status(404).json({ success: false, error: "post not found" });
+    try {
+      const findPost = await PostModel.findOne({ _id: id }).populate(
+        "user",
+        "userName"
+      );
+
+      if (!findPost) {
+        return res
+          .status(404)
+          .json({ success: false, error: "Post not found" });
+      }
+      // Determine if the user has liked the post
+
+      const userLiked = findPost.idPeopleThatLike.includes(userId);
+
+      // Check if the user making the request is the creator of the post
+      const isCreator = findPost.user._id.toString() === userId;
+
+      // Prepare the response with like status and likes count
+      const postResponse = {
+        ...findPost.toObject(),
+        userLiked: userLiked,
+        likes: findPost.idPeopleThatLike.length,
+        isCreator: isCreator,
+      };
+
+      res.json(postResponse);
+    } catch (error) {
+      console.error("Error fetching post:", error);
+      res.status(500).json({ success: false, error: "Internal Server Error" });
     }
-
-    // Determine if the user has liked the post
-    const userLiked = findPost.idPeopleThatLike.includes(userId);
-
-    // Prepare the response with like status and likes count
-    const postResponse = {
-      ...findPost.toObject(),
-      userLiked: userLiked,
-      likes: findPost.idPeopleThatLike.length, // Number of likes
-    };
-    
-    res.json(postResponse);
   }
 );
 

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { MoreVert } from "@mui/icons-material";
 import {
   Avatar,
   Box,
@@ -7,7 +6,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  IconButton,
   Typography,
 } from "@mui/material";
 import Icons from "../icons/Icons";
@@ -27,6 +25,7 @@ export const SelectedPost = () => {
   const [post, setPost] = useState({});
   const { handleShare } = useSharePost();
   const [postUpdate, setPostupdate] = useState(false);
+  const [reqAuthorPost, setReqAuthorPost] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,8 +33,12 @@ export const SelectedPost = () => {
       try {
         const response = await postService.onePost(postId);
         setPost(response);
+        setReqAuthorPost(response.isCreator);
+        console.log(response.isCreator);
       } catch (error) {
         console.error("Error fetching post:", error);
+        //In the case of sending an ID that does not exist or is not supported in MongoDB's format
+        navigate("/home");
       }
     };
 
@@ -61,16 +64,20 @@ export const SelectedPost = () => {
     navigate(-1); // This will navigate back to the previous page
   };
 
-   const onPostUpdated = () => {
-     setPostupdate(false);
-     // fetchPost();
-   };
+  const onPostUpdated = () => {
+    setPostupdate(false);
+    // fetchPost();
+  };
+
   return (
     <Box flex={4} p={0}>
       <TopIcons
         handleBackClick={handleBackClick}
         setPostupdate={setPostupdate}
+        post={post}
+        reqAuthorPost={reqAuthorPost}
       ></TopIcons>
+
       {postUpdate ? (
         <Box sx={{ mt: 6, mr: 1 }}>
           <Add

@@ -31,6 +31,16 @@ function CountextDataProvider({ children }) {
     }
   };
 
+const deletePost = async (postID) => {
+  try {
+    console.log(postID + "postID");
+    await postService.deletePost(postID);
+    console.log("Post deleted successfully");
+  } catch (error) {
+    console.error("Error deleting post:", error);
+  }
+};
+
   const allPosts = async () => {
     try {
       const response = await postService.feedPosts();
@@ -44,7 +54,14 @@ function CountextDataProvider({ children }) {
 
   return (
     <CountextData.Provider
-      value={{ postDetails, createPost, allPosts, setPostDetails, updatePost }}
+      value={{
+        postDetails,
+        createPost,
+        allPosts,
+        setPostDetails,
+        updatePost,
+        deletePost,
+      }}
     >
       {children}
     </CountextData.Provider>

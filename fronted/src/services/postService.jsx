@@ -43,3 +43,10 @@ export const updatePost = async (postData, like, postId) => {
     body: { post: postData },
   });
 };
+
+export const deletePost = async (postId) => {
+  const queryParams = postId ? `${postId}` : "";
+  return sendRequest(`${OptionsUrl.removePost.url}${queryParams}`, {
+    method: OptionsUrl.removePost.method,
+  });
+};

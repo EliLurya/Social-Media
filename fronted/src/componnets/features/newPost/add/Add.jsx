@@ -22,7 +22,7 @@ const Add = (props) => {
   const [isUploading, setIsUploading] = useState(false);
   const [textOnly, setTextOnly] = useState(true);
   const [isUpdateMode, setIsUpdateMode] = useState(false);
-
+console.log(textOnly +"" + isUploading);
   // Function to reset form state
   const resetFormState = () => {
     setPostText("");
@@ -45,7 +45,7 @@ const Add = (props) => {
     setTextInput(inputText.trim() !== "" || !!postImage);
     setPostText(inputText);
   };
-
+console.log(currentImageUrl + "currentImageUrl");
   // Function to handle sending the post (create or update)
   const handleSend = async () => {
     try {
@@ -121,7 +121,7 @@ const Add = (props) => {
           {isUpdateMode ? "Update" : "Send"}
         </Button>
       </Stack>
-      {!textOnly && isUploading && (
+      { isUploading && (
         <ProgressBar uploadProgress={uploadProgress} />
       )}
     </Stack>

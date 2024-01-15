@@ -3,12 +3,12 @@ import React from "react";
 import { getFlexStyles } from "../../../../../common/style/CommonStyles";
 import Update from "./update";
 import Remove from "./Remove";
-const UpdateAndRemove = ({ setPostupdate }) => {
+const UpdateAndRemove = ({ setPostupdate, post }) => {
   return (
     <>
       <Box sx={getFlexStyles("none", {})}>
         <Update setPostupdate={setPostupdate}></Update>
-        <Remove></Remove>
+        <Remove post={post}></Remove>
       </Box>
     </>
   );

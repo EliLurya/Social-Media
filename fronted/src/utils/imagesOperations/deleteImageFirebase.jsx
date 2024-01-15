@@ -3,6 +3,7 @@ import { storage } from "./Firebase-config";
 
 export const deleteImageFirebase = async (imagePath) => {
   const imageRef = ref(storage, imagePath);
+  console.log(imageRef + "imageRef");
   try {
     await deleteObject(imageRef);
     console.log("Image deleted successfully");
