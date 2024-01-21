@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Stack, Button } from "@mui/material";
-import PostInputField from "../../../../newPost/add/PostInputField";
-import ImagePreview from "../../../../newPost/add/ImagePreview";
-import AddOptions from "../../../../newPost/add/AddOptions";
-import { getFlexStyles } from "../../../../../common/style/CommonStyles";
+import PostInputField from "../../newPost/add/PostInputField";
+import ImagePreview from "../../newPost/add/ImagePreview";
+import AddOptions from "../../newPost/add/AddOptions";
+import { getFlexStyles } from "../../../common/style/CommonStyles";
 
 const CommentForm = ({
   commentText,

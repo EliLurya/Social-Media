@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { Box, Button } from "@mui/material";
 import CommentHeader from "./CommentHeader";
 import CommentForm from "./CommentForm";
-import useResponsive from "../../../../../../utils/useResponsive";
-import { getFlexStyles } from "../../../../../common/style/CommonStyles";
-import uploadImage from "../../../../../../utils/imagesOperations/uploadImage";
-import compressImage from "../../../../../../utils/imagesOperations/compressImage";
-import { deleteImageFirebase } from "../../../../../../utils/imagesOperations/deleteImageFirebase";
-import { CountextData } from "../../../../../../context/ContextData";
+import useResponsive from "../../../../utils/useResponsive";
+import { getFlexStyles } from "../../../common/style/CommonStyles";
+import uploadImage from "../../../../utils/imagesOperations/uploadImage";
+import compressImage from "../../../../utils/imagesOperations/compressImage";
+import { deleteImageFirebase } from "../../../../utils/imagesOperations/deleteImageFirebase";
+import { CountextData } from "../../../../context/ContextData";
 
 const CommentInputField = ({ onCommentChange, handleCommentField, post }) => {
   const [commentText, setCommentText] = useState(""); // Text of the comment
