@@ -63,7 +63,11 @@ export const OptionsUrl = {
     method: options.PUT,
   },
   removePost: {
-    url: "/user/action//deletePost/",
+    url: "/user/action/deletePost/",
     method: options.DELETE,
+  },
+  createComment: {
+    url: "/user/action/newComment/",
+    method: options.POST,
   },
 };

@@ -1,11 +1,12 @@
 import { TextField } from "@mui/material";
 
-const PostInputField = ({ postText, handleTextChange }) => (
+const PostInputField = ({ postText, handleTextChange, placeholder }) => (
   <TextField
+    fullWidth
     variant="standard"
     hiddenLabel
     id="filled-hidden-label-small"
-    placeholder="What's new?"
+    placeholder={!placeholder? "What's new?" : placeholder}  
     size="small"
     multiline
     value={postText}

@@ -3,9 +3,8 @@ import { getFlexStyles } from "../../../common/style/CommonStyles";
 import { Cancel } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 
-const ImagePreview = ({ postImage, setPostImage }) => {
+const ImagePreview = ({ postImage, setPostImage, smallScreenComment }) => {
   const [imageSrc, setImageSrc] = useState("");
-
   useEffect(() => {
     if (postImage && postImage instanceof File) {
       const url = URL.createObjectURL(postImage);
@@ -34,7 +33,7 @@ const ImagePreview = ({ postImage, setPostImage }) => {
               cursor: "pointer",
               zIndex: 1,
               padding: 0.5,
-              fontSize: 40,
+              fontSize: smallScreenComment ? 30 : 40,
             }}
             onClick={() => setPostImage(null)}
           />

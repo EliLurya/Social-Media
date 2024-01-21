@@ -76,7 +76,7 @@ const NavBar = ({ setDarkMode   }) => {
   return (
     <AppBar
       position="sticky"
-      sx={{ backgroundColor: "primary", width: "100%", minWidth: "100%" }}
+      sx={{ backgroundColor: "primary", width: "100%", minWidth: "350px" }}
     >
       <StyledToolbar>
         {matches || !signInSuccessful ? (

@@ -12,7 +12,7 @@ router.post(
   jsonParser,
   authentication("user"),
   async (req: Request, res: Response) => {
-    const { comment, postId, parentCommentId } = req.body;
+    const { comment, postId, parentCommentId } = req.body;    
     try {
       // Create a new instance of CommentModel and set its properties
       const newComment = new CommentModel({
@@ -31,6 +31,8 @@ router.post(
           await parentComment.save();
         }
       }
+      console.log(savedComment);
+      
       res.json({
         success: true,
         data: savedComment,

@@ -41,6 +41,7 @@ const { signInSuccessful, isLoading } = useAuth();
                 bgcolor: (theme) => theme.palette.background.default,
                 color: (theme) => theme.palette.text.primary,
                 minHeight: "100vh",
+                minWidth: "350px",
               }}
             >
               <Stack
