@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import RecentTrend from "./RecentTrend";
-import useResponsive from "../../../utils/useResponsive";
+import useResponsive from "../../../utils/UseResponsive";
 import { getFlexStyles } from "../../common/style/CommonStyles";
 const RigthBar = () => {
   // Image data for the latest photos section

@@ -12,7 +12,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { menuItems } from "./menuItems";
-import useResponsive from "../../../utils/useResponsive";
+import useResponsive from "../../../utils/UseResponsive";
 import logo from "../../../assets/images/picsvg_download22.svg";
 import { Link, useLocation } from "react-router-dom";
 

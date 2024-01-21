@@ -2,7 +2,7 @@ import React from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Box } from "@mui/material";
 import { getFlexStyles } from "../../../common/style/CommonStyles";
-import useResponsive from "../../../../utils/useResponsive";
+import useResponsive from "../../../../utils/UseResponsive";
 
 const CommentHeader = ({ handleCommentField }) => {
   const matches = useResponsive(); // Custom hook for responsive design

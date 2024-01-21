@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import TextFields from "../common/fields/TextFields";
 import { getFlexStyles, getHoverButton } from "../common/style/CommonStyles";
-import useResponsive from "../../utils/useResponsive";
+import useResponsive from "../../utils/UseResponsive";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { ROUTES } from "../../utils/routes";

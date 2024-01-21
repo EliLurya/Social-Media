@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import { Post } from "./posts/posts/Post";
 import Add from "../newPost/add/Add";
 import { getFlexStyles } from "../../common/style/CommonStyles";
-import useResponsive from "../../../utils/useResponsive";
+import useResponsive from "../../../utils/UseResponsive";
 import * as postService from "../../../services/postService";
 
 // Feed component represents the main area where posts are displayed

@@ -1,5 +1,5 @@
 import { Box, Divider } from "@mui/material";
-import useResponsive from "../../utils/useResponsive";
+import useResponsive from "../../utils/UseResponsive";
 import logo from "../../assets/images/picsvg_download22.svg";
 import { getFlexStyles } from "../common/style/CommonStyles";
 

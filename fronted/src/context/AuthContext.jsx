@@ -87,11 +87,16 @@ export default function AuthProvider({ children }) {
       const token = credentialResponse.credential;
       const response = await userService.signInWithGoogle(token);
       if (response.success) {
+        console.log(response);
         const auth = getAuth();
         //Token for firebaseToken
         await signInWithCustomToken(auth, response.firebaseToken);
         setSignInSuccessful(true);
-      }
+      } else {
+    console.error(error);
+}
+        
+      
     } catch (error) {
       console.error("Login Failed:", error);
     }

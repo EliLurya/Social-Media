@@ -1,7 +1,7 @@
 import { Box, Button, CardContent, Typography } from "@mui/material";
 import { useContext } from "react";
 import { CountextData } from "../../../context/ContextData"; // Correct the filename
-import useResponsive from "../../../utils/useResponsive";
+import useResponsive from "../../../utils/UseResponsive";
 import { getFlexStyles } from "../../common/style/CommonStyles";
 
 const RecentTrend = () => {

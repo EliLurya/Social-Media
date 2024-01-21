@@ -1,7 +1,7 @@
 import { Box, Container, Stack } from "@mui/material";
 import RigthBar from "./componnets/layout/rightBar/RigthBar";
 import Sidebar from "./componnets/layout/sidebar/Sidebar";
-import Navbar from "./componnets/layout/navbar/Navbar";
+import Navbar from "./componnets/layout/navBar/Navbar";
 import { useState } from "react";
 import AllRoutes from "./routes/AllRoutes";
 import SignRoutes from "./routes/SignRoutes";

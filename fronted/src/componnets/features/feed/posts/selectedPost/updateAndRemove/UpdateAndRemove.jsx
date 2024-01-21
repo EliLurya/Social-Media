@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import React from "react";
 import { getFlexStyles } from "../../../../../common/style/CommonStyles";
-import Update from "./update";
+import Update from "./Update";
 import Remove from "./Remove";
 const UpdateAndRemove = ({ setPostupdate, post }) => {
   return (

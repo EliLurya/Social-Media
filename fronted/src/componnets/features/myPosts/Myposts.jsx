@@ -2,7 +2,7 @@ import React from "react";
 import { Post } from "../feed/posts/posts/Post";
 import * as postService from "../../../services/postService";
 import { Box } from "@mui/material";
-import useResponsive from "../../../utils/useResponsive";
+import useResponsive from "../../../utils/UseResponsive";
 
 const Myposts = () => {
   const matches = useResponsive(); // Custom hook to get responsive behavior

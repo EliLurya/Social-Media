@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Button, Stack } from "@mui/material";
 import { CountextData } from "../../../../context/ContextData";
-import uploadImage from "../../../../utils/imagesOperations/uploadImage";
+import uploadImage from "../../../../utils/imagesOperations/UploadImage";
 import compressImage from "../../../../utils/imagesOperations/compressImage";
 import ProgressBar from "../../../../utils/imagesOperations/ProgressBar";
 import PostInputField from "./PostInputField";

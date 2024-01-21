@@ -1,5 +1,5 @@
 import { Box, Button, CardMedia, Modal } from "@mui/material";
-import useResponsive from "../../../../utils/useResponsive";
+import useResponsive from "../../../../utils/UseResponsive";
 import { getFlexStyles } from "../../../common/style/CommonStyles";
 // ShowImage component for displaying an image and handling image modal
 const ShowImage = ({

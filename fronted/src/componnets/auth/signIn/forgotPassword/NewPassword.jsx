@@ -26,18 +26,18 @@ const NewPassword = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true); // State for loading indicator
   const [tokenValidationMessage, setTokenValidationMessage] = useState("");
-
   // Effect to validate the reset token on component mount
   useEffect(() => {
     const validateToken = async () => {
       setIsLoading(true);
       try {
         const responseData = await userService.validateResetToken(token);
+        console.log(responseData + "responseData");
         if (!responseData.success) {
           setTokenValidationMessage("Invalid or expired reset token");
           setTimeout(() => {
             navigate("sign");
-          }, 1500);
+          }, 2500);
         }
       } catch (error) {
         console.error("Error validating token:", error);
@@ -71,7 +71,7 @@ const NewPassword = () => {
       );
 
       if (responseData.success) {
-        navigate(ROUTES.SIGN);
+        navigate(ROUTES.HOME);
       } else {
         console.error("Failed to reset password:", responseData.error);
       }
