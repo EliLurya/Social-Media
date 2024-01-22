@@ -2,8 +2,8 @@ import { Share } from "@mui/icons-material";
 import { Box, CardActions, IconButton } from "@mui/material";
 import LikeButton from "./LikeButton";
 import { useState } from "react";
-import CommentInputField from "../../comment/CommentInputField";
-import CommentIcon from "../../comment/CommentIcon";
+import CommentInputField from "../../comment/addComment/CommentInputField";
+import CommentIcon from "../../comment/addComment/CommentIcon";
 import { getFlexStyles } from "../../../../common/style/CommonStyles";
 
 // Icons component for handling actions liking

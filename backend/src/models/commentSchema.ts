@@ -4,10 +4,9 @@ import { Comment } from "../types/commentTypes";
 const commentSchema = new mongoose.Schema<Comment>({
   comment: {
     type: String,
-    required: [true, "comment is required"],
-    minlength: [1, "comment must be at least 1 character long"],
     maxlength: [280, "comment can be up to 280 characters long"],
   },
+  imageUrl: { type: String },
   createdAt: {
     type: Date,
     required: true,
@@ -30,6 +29,11 @@ const commentSchema = new mongoose.Schema<Comment>({
     ref: "Post",
     required: [true, "postId is required"],
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   likes: {
     type: Number,
     default: 0,
@@ -45,5 +49,5 @@ const commentSchema = new mongoose.Schema<Comment>({
 });
 
 const CommentModel = mongoose.model<Comment>("Comment", commentSchema);
-// module.exports = CommentModel;
+module.exports = CommentModel;
 export default CommentModel;

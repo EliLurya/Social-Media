@@ -22,7 +22,6 @@ const Add = (props) => {
   const [isUploading, setIsUploading] = useState(false);
   const [textOnly, setTextOnly] = useState(true);
   const [isUpdateMode, setIsUpdateMode] = useState(false);
-console.log(textOnly +"" + isUploading);
   // Function to reset form state
   const resetFormState = () => {
     setPostText("");

@@ -14,19 +14,18 @@ export default function AuthProvider({ children }) {
   const [dataSignUp, setDataSignUp] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
- useEffect(() => {
-   const verifyUser = async () => {
-     try {
-       const response = await userService.checkAuth();
-       setSignInSuccessful(response.success);
-     } catch (error) {
-       setSignInSuccessful(false);
-     }
-     setIsLoading(false);
-   };
-   verifyUser();
- }, []);
-
+  useEffect(() => {
+    const verifyUser = async () => {
+      try {
+        const response = await userService.checkAuth();
+        setSignInSuccessful(response.success);
+      } catch (error) {
+        setSignInSuccessful(false);
+      }
+      setIsLoading(false);
+    };
+    verifyUser();
+  }, []);
 
   // Function to handle user sign-up
   const signUp = async (credentials) => {
@@ -87,16 +86,13 @@ export default function AuthProvider({ children }) {
       const token = credentialResponse.credential;
       const response = await userService.signInWithGoogle(token);
       if (response.success) {
-        console.log(response);
         const auth = getAuth();
         //Token for firebaseToken
         await signInWithCustomToken(auth, response.firebaseToken);
         setSignInSuccessful(true);
       } else {
-    console.error(error);
-}
-        
-      
+        console.error(error);
+      }
     } catch (error) {
       console.error("Login Failed:", error);
     }

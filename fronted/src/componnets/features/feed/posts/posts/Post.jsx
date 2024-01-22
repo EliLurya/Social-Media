@@ -16,8 +16,7 @@ import ShowImage from "../ShowImage";
 import { CountextData } from "../../../../../context/ContextData";
 import { useSharePost } from "../icons/useSharePost";
 import { getFlexStyles } from "../../../../common/style/CommonStyles";
-import UpdateAndRemove from "../selectedPost/updateAndRemove/UpdateAndRemove";
-
+import { ShowComment } from "../../comment/ShowComment";
 /**
  * Component to render a list of posts.
  * Supports infinite scrolling by fetching more posts as the user scrolls down.
@@ -149,6 +148,10 @@ export const Post = ({ fetchPostsFunction }) => {
             }
             post={post}
           />
+          <Box>
+            <ShowComment post={post}></ShowComment>
+          </Box>
+
           <Divider
             sx={{
               bgcolor: (theme) => theme.palette.text.secondary,

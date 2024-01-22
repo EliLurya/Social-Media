@@ -1,9 +1,10 @@
 import React from "react";
 import { Box, Stack, Button } from "@mui/material";
-import PostInputField from "../../newPost/add/PostInputField";
-import ImagePreview from "../../newPost/add/ImagePreview";
-import AddOptions from "../../newPost/add/AddOptions";
-import { getFlexStyles } from "../../../common/style/CommonStyles";
+import PostInputField from "../../../newPost/add/PostInputField";
+import ImagePreview from "../../../newPost/add/ImagePreview";
+import AddOptions from "../../../newPost/add/AddOptions";
+import { getFlexStyles } from "../../../../common/style/CommonStyles";
+import ProgressBar from "../../../../../utils/imagesOperations/ProgressBar";
 
 const CommentForm = ({
   commentText,
@@ -13,6 +14,8 @@ const CommentForm = ({
   handleSendComment,
   smallScreenComment,
   handleEmojiSelect,
+  isUploading,
+  uploadProgress,
 }) => {
   return (
     // Main container for the comment form
@@ -84,6 +87,9 @@ const CommentForm = ({
             >
               Send
             </Button>
+          </Box>
+          <Box>
+            {isUploading && <ProgressBar uploadProgress={uploadProgress} />}
           </Box>
         </Box>
       </Stack>

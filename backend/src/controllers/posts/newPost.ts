@@ -2,7 +2,6 @@ import express, { Request, Response, Router } from "express";
 import UserModel from "../../models/userSchema";
 import { User } from "../../types/userTypes";
 import { authentication } from "../../middleware/authMiddleware";
-import mongoose from "mongoose";
 
 const body_parser = require("body-parser");
 const jsonParser = body_parser.json();

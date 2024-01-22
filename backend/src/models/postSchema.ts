@@ -19,7 +19,12 @@ const postSchema = new mongoose.Schema<Post>({
   idPeopleThatLike: [
     { type: mongoose.Schema.Types.ObjectId, ref: "LikeEntry" },
   ],
-  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
+    },
+  ],
   rankPost: {
     type: Number,
     default: 0,
