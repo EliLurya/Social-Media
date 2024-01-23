@@ -1,83 +1,48 @@
-import express, { Request, Response, Router } from "express";
+import express, { Request, Response } from "express";
 import { authentication } from "../../middleware/authMiddleware";
-import PostModel from "../../models/postSchema";
-import CommentModel from "../../models/commentSchema";
+import populatePosts from "../../utils/populatePosts";
+import bodyParser from "body-parser";
 
-const router: Router = express.Router();
-const bodyParser = require("body-parser");
+const router = express.Router();
 const jsonParser = bodyParser.json();
 
-// Route to fetch a single post by its ID
 router.post(
   "/getPost",
   jsonParser,
   authentication("user"),
   async (req: Request, res: Response) => {
     const userId = req.user.userId; // Get the authenticated user's ID
-    const { id } = req.body; // Get the post ID from the request body
+    const { id, commentsLimit, lastCommentId } = req.body; // Get the post ID, commentsLimit, and lastCommentId from the request body
 
-    // Check if the post ID is provided
     if (!id) {
       return res
         .status(400)
-        .json({ success: false, error: "Post ID is required" });
+        .json({ success: false, error: "Post ID is required" }); // Check if the post ID is provided
     }
 
     try {
-      // Fetch the post by ID and populate related data
-      const findPost = await PostModel.findOne({ _id: id })
-        .populate("user", "userName _id") // Populate user data: userName and _id
-        .populate({
-          path: "comments", // Populate comments associated with the post
-          model: CommentModel, // Specify the model for comments
-          select: "user comment createdAt likes idPeopleThatLike", // Select specific fields from comments
-          options: { sort: { createdAt: -1 } }, // Sort comments by creation date
-        });
+      const query = { _id: id }; // Construct a query to fetch the specific post by ID
+      const commentsLimitParsed = parseInt(commentsLimit) || 5; // Parse commentsLimit or default to 5
+      const postsWithLikeStatusAndComments = await populatePosts(
+        query,
+        userId,
+        1, // Limit is 1 because we are fetching a single post
+        undefined, // lastPostId is undefined because we are fetching a specific post by ID
+        true, // includeComment is true because we want to include comment details
+        commentsLimitParsed, // Pass the parsed commentsLimit
+        lastCommentId // Pass the lastCommentId for comment pagination
+      ); // Use the utility function to fetch and enrich the post
 
-      // Handle case where the post is not found
-      if (!findPost) {
+      // Check if the post is found
+      if (!postsWithLikeStatusAndComments.length) {
         return res
           .status(404)
-          .json({ success: false, error: "Post not found" });
+          .json({ success: false, error: "Post not found" }); // Handle case where the post is not found
       }
 
-      // Process each comment to determine if the user created or liked the comment
-      const enrichedComments = findPost.comments.map((comment) => {
-        // Check if the current user is the creator of the comment
-        const isCreatorComment = comment.user._id.equals(userId);
-        // Check if the current user has liked the comment
-        const userLikedComment = comment.idPeopleThatLike.some((id) =>
-          id.equals(userId)
-        );
-
-        // Return the comment with added properties for isCreatorComment and userLikedComment
-        return {
-          ...comment.toObject(),
-          isCreatorComment,
-          userLikedComment,
-        };
-      });
-
-      // Check if the current user has liked the post
-      const userLikedPost = findPost.idPeopleThatLike.some((id) =>
-        id.equals(userId)
-      );
-      // Check if the current user is the creator of the post
-      const isCreator = findPost.user._id.toString() === userId;
-
-      // Prepare the response with additional information about the user's interaction with the post and its comments
-      const postResponse = {
-        ...findPost.toObject(),
-        userLikedPost, // Include if the user liked the post
-        likes: findPost.idPeopleThatLike?.length || 0, // Include the number of likes on the post
-        isCreator, // Include if the user is the creator of the post
-        comments: enrichedComments, // Include the enriched comments
-      };
-
-      // Send the response with the post and additional information
-      res.json(postResponse);
+      res.json(postsWithLikeStatusAndComments[0]); // Send the response with the enriched post (first element of the array)
     } catch (error) {
-      console.error("Error fetching post:", error);
+      console.error("Error fetching post:", error); // Log and handle any errors during the database query
       res.status(500).json({ success: false, error: "Internal Server Error" });
     }
   }

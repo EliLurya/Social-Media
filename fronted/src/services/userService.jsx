@@ -52,8 +52,14 @@ export const signOut = async (data) => {
   });
 };
 
-export const checkAuth = async () =>{
+export const checkAuth = async () => {
   return sendRequest(OptionsUrl.checkAuth.url, {
     method: OptionsUrl.checkAuth.method,
   });
-}
+};
+
+export const refreshFireBaseToken = async () => {
+  return sendRequest(OptionsUrl.refreshBasefireToken.url, {
+    method: OptionsUrl.refreshBasefireToken.method
+  });
+};

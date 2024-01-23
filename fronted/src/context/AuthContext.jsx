@@ -98,6 +98,21 @@ export default function AuthProvider({ children }) {
     }
   };
 
+  // Function to refresh the Firebase token
+  const refreshFirebaseToken = async () => {
+    try {
+      const response = await userService.refreshFireBaseToken(); // Implement this method in your userService
+      if (response.success) {
+        const auth = getAuth();
+        await signInWithCustomToken(auth, response.firebaseToken);
+        console.log("Firebase token refreshed successfully.");
+        return response.firebaseToken;
+      }
+    } catch (error) {
+      console.error("Error refreshing Firebase token:", error);
+      throw error;
+    }
+  };
   return (
     <AuthContext.Provider
       value={{
@@ -111,6 +126,7 @@ export default function AuthProvider({ children }) {
         dataSignUp,
         setSignUpCodeReq,
         isLoading,
+        refreshFirebaseToken,
       }}
     >
       {children}

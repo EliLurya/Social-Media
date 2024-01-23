@@ -16,7 +16,8 @@ import ShowImage from "../ShowImage";
 import { CountextData } from "../../../../../context/ContextData";
 import { useSharePost } from "../icons/useSharePost";
 import { getFlexStyles } from "../../../../common/style/CommonStyles";
-import { ShowComment } from "../../comment/ShowComment";
+import { ShowComment } from "../selectedPost/ShowComment";
+import PostCardHeader from "../../header/postCardHeader";
 /**
  * Component to render a list of posts.
  * Supports infinite scrolling by fetching more posts as the user scrolls down.
@@ -90,6 +91,7 @@ export const Post = ({ fetchPostsFunction }) => {
     image.stopPropagation();
     setImageModalOpen(false);
   };
+  console.log(posts);
   return (
     <>
       <Divider
@@ -104,20 +106,7 @@ export const Post = ({ fetchPostsFunction }) => {
           key={post._id}
           sx={{ margin: "10px 1.1rem 1px 0.1rem", mr: "16px", borderRadius: 1 }}
         >
-          <CardHeader
-            avatar={
-              <Avatar sx={{ bgcolor: "red" }}>
-                {post.user.userName.charAt(0).toUpperCase()}
-              </Avatar>
-            }
-            action={
-              <IconButton aria-label="settings">
-                <MoreVert />
-              </IconButton>
-            }
-            title={post?.user?.userName || ""}
-            subheader={new Date(post.createdAt).toLocaleDateString()}
-          />
+          <PostCardHeader post={post}></PostCardHeader>
 
           <Box component="span">
             <Link
@@ -148,10 +137,6 @@ export const Post = ({ fetchPostsFunction }) => {
             }
             post={post}
           />
-          <Box>
-            <ShowComment post={post}></ShowComment>
-          </Box>
-
           <Divider
             sx={{
               bgcolor: (theme) => theme.palette.text.secondary,

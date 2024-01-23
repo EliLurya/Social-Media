@@ -9,12 +9,14 @@ import Button from "@mui/material/Button";
 import { CountextData } from "../../../../../../context/ContextData";
 import { useNavigate } from "react-router-dom";
 import { deleteImageFirebase } from "../../../../../../utils/imagesOperations/deleteImageFirebase";
+import { useAuth } from "../../../../../../context/AuthContext";
 
 const Remove = ({ post }) => {
   const { deletePost } = useContext(CountextData);
   const navigate = useNavigate();
   // State to control the open state of the dialog
   const [openDialog, setOpenDialog] = useState(false);
+  const { refreshFirebaseToken } = useAuth();
 
   // Function to open the dialog
   const handleClickOpen = () => {
@@ -29,7 +31,7 @@ const Remove = ({ post }) => {
   // Function to handle the deletion of the post
   const handleDelete = async () => {
     await deletePost(post._id); // Call the deletePost function with the postId
-    await deleteImageFirebase(post.imageUrl); //Remove the photo from Firebase
+    await deleteImageFirebase(post.imageUrl, refreshFirebaseToken); //Remove the photo from Firebase
     navigate("/home"); // Navigate to the home page after deletion
   };
 

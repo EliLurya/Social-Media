@@ -15,12 +15,18 @@ export const feedPosts = async (lastPostId = null) => {
   });
 };
 
-export const onePost = async (postId) => {
+export const onePost = async (postId, commentsLimit, lastCommentId) => {
+  const requestBody = {
+    id: postId,
+    commentsLimit: commentsLimit,
+    lastCommentId: lastCommentId,
+  };
   return sendRequest(OptionsUrl.getPost.url, {
     method: OptionsUrl.getPost.method,
-    body: { id: postId },
+    body: requestBody,
   });
 };
+
 
 export const userPosts = async (lastPostId = null) => {
   const queryParams = lastPostId ? `?lastPostId=${lastPostId}` : "";

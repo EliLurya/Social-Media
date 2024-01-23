@@ -9,16 +9,18 @@ import compressImage from "../../../../../utils/imagesOperations/compressImage";
 import { deleteImageFirebase } from "../../../../../utils/imagesOperations/deleteImageFirebase";
 import { CountextData } from "../../../../../context/ContextData";
 import ProgressBar from "../../../../../utils/imagesOperations/ProgressBar";
+import { useAuth } from "../../../../../context/AuthContext";
 
 const CommentInputField = ({ onCommentChange, handleCommentField, post }) => {
   const [commentText, setCommentText] = useState(""); // Text of the comment
-  const [commentImage, setCommentImage] = useState<File | null>(null); // Image attached to the comment
+  const [commentImage, setCommentImage] = useState(null); // Image attached to the comment
   const [currentCommentImageUrl, setCurrentCommentImageUrl] = useState(null); // URL of the current comment image
   const [uploadProgress, setUploadProgress] = useState(0); // Progress of image upload
   const [isUploading, setIsUploading] = useState(false); // Flag to indicate if uploading is in progress
   const matches = useResponsive(); // Responsive design hook
   const [smallScreenComment, setSmallScreenComment] = useState(false); // Flag for small screen layout
   const { createComment } = useContext(CountextData); // Context hook to create a comment
+  const { refreshFirebaseToken } = useAuth();
 
   // Function to append selected emoji to the comment text
   const handleEmojiSelect = (emoji) => {
@@ -48,12 +50,19 @@ const CommentInputField = ({ onCommentChange, handleCommentField, post }) => {
       if (commentImage && commentImage instanceof File) {
         // Delete current image if a new one is selected
         if (currentCommentImageUrl && currentCommentImageUrl !== commentImage) {
-          await deleteImageFirebase(currentCommentImageUrl);
+          await deleteImageFirebase(
+            currentCommentImageUrl,
+            refreshFirebaseToken
+          );
         }
 
         // Compress and upload new image
         const compressedImage = await compressImage(commentImage);
-        imageUrl = await uploadImage(compressedImage, setUploadProgress);
+        imageUrl = await uploadImage(
+          compressedImage,
+          setUploadProgress,
+          refreshFirebaseToken
+        );
       }
 
       // Prepare comment data

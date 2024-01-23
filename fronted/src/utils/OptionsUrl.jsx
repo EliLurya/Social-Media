@@ -38,6 +38,10 @@ export const OptionsUrl = {
     url: "/users/check-auth",
     method: options.GET,
   },
+  refreshBasefireToken: {
+    url: "/users/refresh-firebase-token",
+    method: options.GET,
+  },
   newPost: {
     url: "/user/action/newPost",
     method: options.POST,

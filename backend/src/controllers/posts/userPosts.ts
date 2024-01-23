@@ -1,42 +1,39 @@
 import express, { Request, Response, Router } from "express";
 import { authentication } from "../../middleware/authMiddleware";
-import PostModel from "../../models/postSchema";
+import populatePosts from "../../utils/populatePosts"; 
 
 const router: Router = express.Router();
 
-/**
- * Route to get a paginated list of posts for a specific user.
- * This route supports pagination and limits the number of posts returned per request.
- */
+// Define the GET route to fetch posts associated with a specific user
 router.get(
   "/posts",
   authentication("user"), // Middleware to ensure the user is authenticated
   async (req: Request, res: Response) => {
-    const id: string = req.user.userId; // Extracting the user's ID from the request
-    const limit: number = parseInt(req.query.limit as string) || 10; // Limit for the number of posts to fetch
-    const lastPostId: string | undefined = req.query.lastPostId as string; // ID of the last post loaded for pagination
+    const userId = req.user.userId; // Extract the authenticated user's ID from the request
+    const limit = parseInt(req.query.limit as string) || 10; // Parse 'limit' from query parameters or default to 10
+    const lastPostId = req.query.lastPostId as string | undefined; // Parse 'lastPostId' from query parameters for pagination purposes
 
     try {
-      // Constructing a query to fetch posts by the user
-      let query: any = { user: id };
+      // Construct a query to fetch posts where the user is the creator, liker, or commenter
+      const baseQuery = {
+        $or: [
+          { user: userId }, // Posts created by the user
+          { idPeopleThatLike: userId }, // Posts liked by the user
+          { "comments.user": userId }, // Posts commented on by the user
+        ],
+      };
 
-      // If 'lastPostId' is provided, add it to the query to fetch posts older than the lastPostId
-      if (lastPostId) {
-        query._id = { $lt: lastPostId };
-      }
+      // Use the populatePosts utility function to fetch and enrich posts based on the constructed query
+      const postsWithLikeStatusAndComments = await populatePosts(
+        baseQuery,
+        userId,
+        limit,
+        lastPostId
+      );
 
-      // Fetching posts from the database based on the constructed query
-      // Posts are sorted by creation date in descending order and limited by the 'limit' value
-      const posts = await PostModel.find(query)
-        .populate("user", "userName") // Populating the 'user' field with 'userName'
-        .sort({ createdAt: -1 }) // Sorting posts by creation date
-        .limit(limit); // Applying the limit to the number of posts
-
-      // Sending the fetched posts as a response
-      res.json(posts);
+      res.json(postsWithLikeStatusAndComments);
     } catch (error) {
-      // Handling any errors during the database operation
-      console.error("Error fetching user posts:", error);
+      console.error("Error fetching user activity:", error);
       res.status(500).json({ success: false, error: "Internal Server Error" });
     }
   }

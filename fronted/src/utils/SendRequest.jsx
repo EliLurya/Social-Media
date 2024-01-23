@@ -3,7 +3,7 @@ export async function sendRequest(url, options = {}) {
     const defaultHeaders = {
         "Content-Type": "application/json",
     };
-
+console.log(url);
     const headers = { ...defaultHeaders, ...options.headers };
     const fetchOptions = {
         method: options.method || "GET",

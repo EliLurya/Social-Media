@@ -5,6 +5,7 @@ import resetPassword from "../controllers/users/resetPassword";
 import signUpGoogle from "../controllers/users/signup/signUpGoogle";
 import checkHuth from "../controllers/users/checkAuth/checkAuth";
 import signOut from "../controllers/users/signOut";
+import refreshFireBaseToken from "../controllers/users/refreshFirebaseToken/refreshFireBaseToken"
 const router: Router = express.Router();
 //Sign-up
 router.use("/", signUp);
@@ -16,6 +17,8 @@ router.use("/", resetPassword);
 router.use("/", signUpGoogle);
 //Check authorization
 router.use("/", checkHuth);
+
+router.use("/", refreshFireBaseToken);
 // Logout
 router.use("/", signOut);
 export default router;

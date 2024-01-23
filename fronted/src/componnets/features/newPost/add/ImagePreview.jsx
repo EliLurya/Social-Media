@@ -3,7 +3,12 @@ import { getFlexStyles } from "../../../common/style/CommonStyles";
 import { Cancel } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 
-const ImagePreview = ({ postImage, setPostImage, smallScreenComment }) => {
+const ImagePreview = ({
+  postImage,
+  setPostImage,
+  smallScreenComment,
+  onRemoveImage,
+}) => {
   const [imageSrc, setImageSrc] = useState("");
   useEffect(() => {
     if (postImage && postImage instanceof File) {
@@ -35,7 +40,10 @@ const ImagePreview = ({ postImage, setPostImage, smallScreenComment }) => {
               padding: 0.5,
               fontSize: smallScreenComment ? 30 : 40,
             }}
-            onClick={() => setPostImage(null)}
+            onClick={() => {
+              setPostImage(null);
+              onRemoveImage;
+            }}
           />
           <img
             src={imageSrc}
