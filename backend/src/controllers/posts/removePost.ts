@@ -1,12 +1,12 @@
 import express, { Request, Response, Router } from "express";
 import UserModel from "../../models/userSchema";
+import PostModel from "../../models/postSchema";
+import CommentModel from "../../models/commentSchema"; // Import the Comment model
 import mongoose from "mongoose";
 import { User } from "../../types/userTypes";
 import { Post } from "../../types/postTypes";
-
 import { authentication } from "../../middleware/authMiddleware";
 
-const PostModel = require("../../models/postSchema");
 const router: Router = express.Router();
 
 // Remove post route
@@ -17,43 +17,50 @@ router.delete(
     const userId: string = req.user.userId; // Get user ID from authenticated request
     const postId: string = req.params.idPost;
     try {
-      // Find the user by ID in the database
-      const user: User | null = await UserModel.findOne({ _id: userId });
-      if (!user) {
-        return res
-          .status(404)
-          .json({ success: false, error: "User not found" });
-      }
+      const session = await mongoose.startSession();
+      session.startTransaction(); // Start a transaction to ensure atomicity
+
       // Find the post to be deleted by ID
       const postToDelete: Post | null = await PostModel.findOne({
         _id: postId,
-      });
+      }).session(session);
       if (!postToDelete) {
+        await session.abortTransaction();
+        session.endSession();
         return res
           .status(404)
           .json({ success: false, error: "Post not found" });
       }
-      // Create a copy of the post to be deleted before deleting it
-      const dataPost: Post = { ...postToDelete };
+
       // Delete the post from the database
-      await PostModel.deleteOne({ _id: postId });
-      // Remove the deleted post from the user's posts array using a loop
-      const updatedPosts: mongoose.Types.ObjectId[] = [];
-      for (const postIdObj of user.posts as mongoose.Types.ObjectId[]) {
-        if (postIdObj.toString() !== postId) {
-          updatedPosts.push(postIdObj);
-        }
+      await PostModel.deleteOne({ _id: postId }).session(session);
+
+      // Delete all comments associated with the post
+      await CommentModel.deleteMany({ postId: postId }).session(session);
+
+      // Remove the deleted post from the user's posts array
+      const user: User | null = await UserModel.findOne({
+        _id: userId,
+      }).session(session);
+      if (user) {
+        user.posts = user.posts.filter(
+          (postIdObj) => postIdObj.toString() !== postId
+        );
+        await user.save({ session });
       }
-      user.posts = updatedPosts;
-      await user.save();
-      // Respond with success message and deleted post data
+
+      // Commit the transaction
+      await session.commitTransaction();
+      session.endSession();
+
+      // Respond with success message
       res.json({
         success: true,
-        message: "Post deleted successfully",
-        data: dataPost,
+        message: "Post and related comments deleted successfully",
+        data: postToDelete,
       });
     } catch (error) {
-      console.error("Error deleting post:", error);
+      console.error("Error deleting post and related comments:", error);
       res.status(500).json({ success: false, error: "Internal Server Error" });
     }
   }
