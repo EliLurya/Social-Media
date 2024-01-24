@@ -6,17 +6,18 @@ import { getFlexStyles } from "../../../../../common/style/CommonStyles";
 import Icons from "../../icons/Icons"; // Import icons if you have specific icons for comments
 import { useSharePost } from "../../icons/useSharePost";
 import ShowImage from "../../ShowImage";
+import useResponsive from "../../../../../../utils/UseResponsive";
 export const ShowComment = ({
   comments,
   loadMoreComments,
   totalLengthComments,
 }) => {
   const { handleShare } = useSharePost();
- const [isImageModalOpen, setImageModalOpen] = useState(false);
- const [enlargedImage, setEnlargedImage] = useState(null);
+  const [isImageModalOpen, setImageModalOpen] = useState(false);
+  const [enlargedImage, setEnlargedImage] = useState(null);
+  const matches = useResponsive(); // Custom hook for responsive design
 
-
-   /**
+  /**
    * Handles click event on a post to set details for viewing or further interaction.
    * @param {Object} post - The post object to set details for.
    */
@@ -37,7 +38,13 @@ export const ShowComment = ({
   };
   return (
     <>
-      <Box sx={getFlexStyles("none", { width: "90%", ml: "3%", mt: 3 })}>
+      <Box
+        sx={getFlexStyles("none", {
+          width: "90%",
+          ml: matches ? "4%" : "3%",
+          mt: 3,
+        })}
+      >
         <Divider
           sx={{
             bgcolor: (theme) => theme.palette.text.secondary,
@@ -90,7 +97,7 @@ export const ShowComment = ({
               handleShare(`/comment/${comment.user.userName}/${comment._id}`)
             }
             post={comment}
-            addComment = {false}
+            addComment={false}
           />
 
           <Divider
