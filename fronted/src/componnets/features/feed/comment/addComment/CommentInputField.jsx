@@ -47,6 +47,7 @@ const CommentInputField = ({ onCommentChange, handleCommentField, post }) => {
       setIsUploading(true);
 
       let imageUrl = currentCommentImageUrl;
+      console.log(commentImage + "jjjjjjjjj");
       if (commentImage && commentImage instanceof File) {
         // Delete current image if a new one is selected
         if (currentCommentImageUrl && currentCommentImageUrl !== commentImage) {
@@ -62,7 +63,9 @@ const CommentInputField = ({ onCommentChange, handleCommentField, post }) => {
           compressedImage,
           setUploadProgress,
           refreshFirebaseToken
-        );
+        )
+        imageUrl = JSON.stringify(imageUrl);
+        console.log(imageUrl + "imageUrl");       
       }
 
       // Prepare comment data

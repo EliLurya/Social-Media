@@ -16,7 +16,7 @@ import ShowImage from "../ShowImage";
 import { CountextData } from "../../../../../context/ContextData";
 import { useSharePost } from "../icons/useSharePost";
 import { getFlexStyles } from "../../../../common/style/CommonStyles";
-import { ShowComment } from "../selectedPost/ShowComment";
+import { ShowComment } from "../selectedPost/commentView/ShowComment";
 import PostCardHeader from "../../header/postCardHeader";
 /**
  * Component to render a list of posts.
@@ -136,6 +136,7 @@ export const Post = ({ fetchPostsFunction }) => {
               handleShare(`/post/${post.user.userName}/${post._id}`)
             }
             post={post}
+            numComments={true}
           />
           <Divider
             sx={{

@@ -1,8 +1,8 @@
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "./Firebase-config";
 
-const uploadImage = (file, onProgress, refreshFirebaseToken) => {
-  refreshFirebaseToken();
+const uploadImage = async (file, onProgress, refreshFirebaseToken) => {
+  await refreshFirebaseToken();
 
   return new Promise((resolve, reject) => {
     const uniqueFileName = `images/${Date.now()}-${file.name}`;

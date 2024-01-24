@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
-import { IconButton, Badge } from "@mui/material";
+import { Badge } from "@mui/material";
 import * as postService from "../../../../../services/postService";
+import CustomTooltip from "../../../../../utils/Tooltip/CustomTooltip";
 
 // Custom icon component with badge
 const LikeIconWithBadge = ({ likes }) => {
@@ -47,7 +48,7 @@ const LikeButton = ({ post }) => {
     }
   };
   return (
-    <IconButton aria-label="add to favorites" onClick={handleLikeClick}>
+    <CustomTooltip title="Like" onClick={handleLikeClick}>
       {isLiked ? (
         <LikeIconWithBadge likes={likes} />
       ) : (
@@ -64,11 +65,11 @@ const LikeButton = ({ post }) => {
           }}
         >
           <FavoriteBorder
-            sx={{ color:  (theme) => theme.palette.text.primary }}
+            sx={{ color: (theme) => theme.palette.text.primary }}
           />
         </Badge>
       )}
-    </IconButton>
+    </CustomTooltip>
   );
 };
 

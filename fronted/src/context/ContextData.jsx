@@ -59,6 +59,7 @@ function CountextDataProvider({ children }) {
 
   // Function to create a comment
   const createComment = async (commentData) => {
+    console.log(JSON.stringify(commentData, null, 4) + "commentData");
     try {
       const response = await commentService.createComment(commentData);
       if (!response.success) {

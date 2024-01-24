@@ -15,6 +15,7 @@ router.post(
   jsonParser,
   authentication("user"), // Apply authentication middleware for user access
   async (req: Request, res: Response) => {
+    console.log(req.body);
     const userId: string = req.user.userId; // Get user ID from authenticated request
     const { comment, postId, parentCommentId, imageUrl } = req.body;
 

@@ -31,7 +31,8 @@ const Remove = ({ post }) => {
   // Function to handle the deletion of the post
   const handleDelete = async () => {
     await deletePost(post._id); // Call the deletePost function with the postId
-    await deleteImageFirebase(post.imageUrl, refreshFirebaseToken); //Remove the photo from Firebase
+    if (post.imageUrl)
+      await deleteImageFirebase(post.imageUrl, refreshFirebaseToken); //Remove the photo from Firebase
     navigate("/home"); // Navigate to the home page after deletion
   };
 

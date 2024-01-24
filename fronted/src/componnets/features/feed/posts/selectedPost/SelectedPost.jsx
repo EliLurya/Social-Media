@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import TopIcons from "./TopIcons";
 import Add from "../../../newPost/add/Add";
 import PostCardHeader from "../../header/postCardHeader";
-import { ShowComment } from "./ShowComment";
+import { ShowComment } from "./commentView/ShowComment";
 
 // SelectedPost component for displaying a single post in detail
 export const SelectedPost = () => {
@@ -108,7 +108,7 @@ export const SelectedPost = () => {
     setPostupdate(false);
     // fetchPost();
   };
-console.log(post?.imageUrl + "oooooooo");
+console.log(post);
   return (
     <>
       {post && (

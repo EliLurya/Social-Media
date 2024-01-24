@@ -30,7 +30,7 @@ const populatePosts = async (
       match: commentQuery, // Apply the comment pagination query
       model: CommentModel,
       populate: { path: "user", model: UserModel, select: "_id userName" },
-      select: "user comment createdAt likes idPeopleThatLike",
+      select: "user comment createdAt likes idPeopleThatLike imageUrl",
       options: { sort: { createdAt: -1 }, limit: commentsLimit }, // Apply limit for comment pagination
     })
     .sort({ createdAt: -1 })
