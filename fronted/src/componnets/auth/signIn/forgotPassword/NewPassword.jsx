@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import * as userService from "../../../../services/userService";
 import { getFlexStyles } from "../../../common/style/CommonStyles";
 import { ROUTES } from "../../../../utils/routes";
+import LoadingPage from "../../../../utils/loadingPage/LoadingPage";
 
 // Validation schema for the password and confirmPassword fields
 const schema = yup.object({
@@ -83,18 +84,7 @@ const NewPassword = () => {
   // Show loading indicator while validating token
   if (isLoading) {
     return (
-      <Box
-        sx={{
-          mt: "4rem",
-          textAlign: "center",
-          alignItems: "center",
-        }}
-      >
-        <CircularProgress size={120} sx={{ color: "secondary" }} />
-        <Typography variant="h4" mt={5}>
-          Loading...
-        </Typography>
-      </Box>
+      <LoadingPage></LoadingPage>
     );
   }
 

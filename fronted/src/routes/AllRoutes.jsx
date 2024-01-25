@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ROUTES } from "../utils/routes";
 import Myposts from "../componnets/features/myPosts/Myposts";
+import LoadingPage from "../utils/loadingPage/LoadingPage";
 
 // Lazy load the page components
 const HomePage = React.lazy(() => import("../pages/HomePage"));
@@ -9,7 +10,7 @@ const SelectedPostPage = React.lazy(() => import("../pages/SelectedPostPage"));
 
 const AllRoutes = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<LoadingPage></LoadingPage>}>
       <Routes>
         <Route path="/home" element={<HomePage />} />
         {/* For checking routes */}

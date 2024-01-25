@@ -9,6 +9,7 @@ import { useAuth } from "./context/AuthContext";
 import { lightTheme, darkTheme } from "./theme/index";
 
 import { ThemeProvider } from "@mui/material/styles";
+import LoadingPage from "./utils/loadingPage/LoadingPage";
 function App() {
   const [openSearch, setOpenSearch] = useState(false);
 const { signInSuccessful, isLoading } = useAuth();
@@ -16,7 +17,7 @@ const { signInSuccessful, isLoading } = useAuth();
   
   
   if (isLoading) {
-    return <div>Loading...</div>; 
+    return <LoadingPage></LoadingPage> 
   }
   return (
     <Box>

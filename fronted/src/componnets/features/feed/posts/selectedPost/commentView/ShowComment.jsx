@@ -53,7 +53,7 @@ export const ShowComment = ({
         ></Divider>
 
         <Typography sx={{ ml: 3, mr: 3 }} variant="h6">
-          COMMENTS
+          {totalLengthComments > 0 ? "COMMENTS" : "Be the first to comment"}
         </Typography>
         <Divider
           sx={{

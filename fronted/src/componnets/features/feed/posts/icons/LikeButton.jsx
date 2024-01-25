@@ -30,7 +30,7 @@ const LikeIconWithBadge = ({ likes }) => {
 
 const LikeButton = ({ post }) => {
   const [likes, setLikes] = useState(post.idPeopleThatLike.length);
-  const [isLiked, setIsLiked] = useState(post.userLiked);
+  const [isLiked, setIsLiked] = useState(post.userLikedPost);
 
   const handleLikeClick = async () => {
     try {
