@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import { User } from "../../types/userTypes";
 import { Post } from "../../types/postTypes";
 import { authentication } from "../../middleware/authMiddleware";
+import { codeError } from "../../utils/errorCodeServer/errorCodeServer";
 
 const router: Router = express.Router();
 
@@ -28,7 +29,7 @@ router.delete(
         await session.abortTransaction();
         session.endSession();
         return res
-          .status(404)
+          .status(codeError.NotFound)
           .json({ success: false, error: "Post not found" });
       }
 
@@ -61,7 +62,9 @@ router.delete(
       });
     } catch (error) {
       console.error("Error deleting post and related comments:", error);
-      res.status(500).json({ success: false, error: "Internal Server Error" });
+      res
+        .status(codeError.InternalServerError)
+        .json({ success: false, error: "Internal Server Error" });
     }
   }
 );

@@ -1,6 +1,7 @@
 import express, { Request, Response, Router } from "express";
 import jwt from "jsonwebtoken";
 import UserModel from "../../../models/userSchema";
+import { codeError } from "../../../utils/errorCodeServer/errorCodeServer";
 const bcrypt = require("bcrypt");
 
 const router: Router = express.Router();
@@ -9,7 +10,9 @@ router.get("/check-auth", (req: Request, res: Response) => {
   const token = req.cookies.token; // Retrieve the token from the cookie
   
   if (!token) {    
-    res.status(401).json({ success: false, message: "Not authenticated" });
+    res
+      .status(codeError.Unauthorized)
+      .json({ success: false, message: "Not authenticated" });
     return;
    }
 
@@ -17,7 +20,7 @@ router.get("/check-auth", (req: Request, res: Response) => {
     if (err) {
       // Handle the error if the token is invalid or expired
       return res
-        .status(401)
+        .status(codeError.Unauthorized)
         .json({ success: false, message: "Invalid or expired token" });
     }
 
@@ -26,7 +29,7 @@ router.get("/check-auth", (req: Request, res: Response) => {
     if (!user) {
       // User does not exist or might have been deleted
       return res
-        .status(404)
+        .status(codeError.NotFound)
         .json({ success: false, message: "User not found" });
     }
 

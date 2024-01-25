@@ -4,6 +4,7 @@ import CommentModel from "../../models/commentSchema";
 import { User } from "../../types/userTypes";
 import { authentication } from "../../middleware/authMiddleware";
 import PostModel from "../../models/postSchema";
+import { codeError } from "../../utils/errorCodeServer/errorCodeServer";
 
 const body_parser = require("body-parser");
 const jsonParser = body_parser.json();
@@ -20,12 +21,10 @@ router.post(
     const { comment, postId, parentCommentId, imageUrl } = req.body;
 
     if (!comment && !imageUrl) {
-      res
-        .status(400)
-        .json({
-          success: false,
-          error: "Comment text or imageUrl is required",
-        });
+      res.status(codeError.BadRequest).json({
+        success: false,
+        error: "Comment text or imageUrl is required",
+      });
       return;
     }
     try {
@@ -33,7 +32,7 @@ router.post(
       const user: User | null = await UserModel.findOne({ _id: userId });
       if (!user) {
         return res
-          .status(404)
+          .status(codeError.NotFound)
           .json({ success: false, error: "User not found" });
       }
 
@@ -72,7 +71,7 @@ router.post(
       });
     } catch (error) {
       console.error("Error creating comment:", error);
-      res.status(500).json({ success: false, error: "Internal Server Error" });
+      res.status(codeError.InternalServerError).json({ success: false, error: "Internal Server Error" });
     }
   }
 );

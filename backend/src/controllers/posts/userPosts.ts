@@ -1,6 +1,7 @@
 import express, { Request, Response, Router } from "express";
 import { authentication } from "../../middleware/authMiddleware";
 import populatePosts from "../../utils/populatePosts"; 
+import { codeError } from "../../utils/errorCodeServer/errorCodeServer";
 
 const router: Router = express.Router();
 
@@ -34,7 +35,9 @@ router.get(
       res.json(postsWithLikeStatusAndComments);
     } catch (error) {
       console.error("Error fetching user activity:", error);
-      res.status(500).json({ success: false, error: "Internal Server Error" });
+      res
+        .status(codeError.InternalServerError)
+        .json({ success: false, error: "Internal Server Error" });
     }
   }
 );

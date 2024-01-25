@@ -1,6 +1,7 @@
 import express, { Request, Response, Router } from "express";
 import UserModel from "../../models/userSchema";
 import { User } from "../../types/userTypes";
+import { codeError } from "../../utils/errorCodeServer/errorCodeServer";
 
 const body_parser = require("body-parser");
 const jsonParser = body_parser.json();
@@ -14,7 +15,9 @@ router.post("/signin", jsonParser, async (req: Request, res: Response) => {
   const { email, password } = req.body; // `login` can be either the email or the username
 
   if (!email || !password) {
-    res.status(400).json({ success: false, error: "Enter email and password" });
+    res
+      .status(codeError.BadRequest)
+      .json({ success: false, error: "Enter email and password" });
     return;
   }
   try {
@@ -23,7 +26,7 @@ router.post("/signin", jsonParser, async (req: Request, res: Response) => {
 
     // If the user doesn't exist, return an error
     if (!user) {
-      res.status(401).json({ success: false, error: "User not found" });
+      res.status(codeError.NotFound).json({ success: false, error: "User not found" });
       return;
     }
 
@@ -34,7 +37,7 @@ router.post("/signin", jsonParser, async (req: Request, res: Response) => {
     );
     if (!isPasswordValid) {
       res
-        .status(401)
+        .status(codeError.BadRequest)
         .json({ success: false, error: "Invalid login credentials" });
       return;
     }
@@ -69,7 +72,9 @@ router.post("/signin", jsonParser, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error signing in:", error);
-    res.status(500).json({ success: false, error: "Internal Server Error" });
+    res
+      .status(codeError.InternalServerError)
+      .json({ success: false, error: "Internal Server Error" });
   }
 });
 

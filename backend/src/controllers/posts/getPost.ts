@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { authentication } from "../../middleware/authMiddleware";
 import populatePosts from "../../utils/populatePosts";
 import bodyParser from "body-parser";
+import { codeError } from "../../utils/errorCodeServer/errorCodeServer";
 
 const router = express.Router();
 const jsonParser = bodyParser.json();
@@ -16,7 +17,7 @@ router.post(
 
     if (!id) {
       return res
-        .status(400)
+        .status(codeError.BadRequest)
         .json({ success: false, error: "Post ID is required" }); // Check if the post ID is provided
     }
 
@@ -36,14 +37,16 @@ router.post(
       // Check if the post is found
       if (!postsWithLikeStatusAndComments.length) {
         return res
-          .status(404)
+          .status(codeError.NotFound)
           .json({ success: false, error: "Post not found" }); // Handle case where the post is not found
       }
 
       res.json(postsWithLikeStatusAndComments[0]); // Send the response with the enriched post (first element of the array)
     } catch (error) {
       console.error("Error fetching post:", error); // Log and handle any errors during the database query
-      res.status(500).json({ success: false, error: "Internal Server Error" });
+      res
+        .status(codeError.InternalServerError)
+        .json({ success: false, error: "Internal Server Error" });
     }
   }
 );

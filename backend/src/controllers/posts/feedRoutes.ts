@@ -2,6 +2,7 @@
 import express, { Request, Response } from "express";
 import { authentication } from "../../middleware/authMiddleware";
 import populatePosts from "../../utils/populatePosts";
+import { codeError } from "../../utils/errorCodeServer/errorCodeServer";
 
 const router = express.Router();
 
@@ -29,7 +30,7 @@ router.get(
       res.json(postsWithLikeStatusAndComments); // Send the response with the enriched posts
     } catch (error) {
       console.error("Error fetching posts:", error);
-      res.status(500).send(error);
+      res.status(codeError.InternalServerError).send(error);
     }
   }
 );

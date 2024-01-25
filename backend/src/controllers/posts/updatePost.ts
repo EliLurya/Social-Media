@@ -1,5 +1,6 @@
 import express, { Request, Response, Router } from "express";
 import { authentication } from "../../middleware/authMiddleware";
+import { codeError } from "../../utils/errorCodeServer/errorCodeServer";
 
 const body_parser = require("body-parser");
 const jsonParser = body_parser.json();
@@ -17,7 +18,7 @@ router.put(
     const { post: postData, like } = req.body;
 
     if (!postData && !like) {
-      res.status(400).json({
+      res.status(codeError.BadRequest).json({
         success: false,
         error: "Send to the body update post or update like",
       });
@@ -28,7 +29,7 @@ router.put(
       const postToUpdate = await PostModel.findOne({ _id: postId });
       if (!postToUpdate) {
         return res
-          .status(404)
+          .status(codeError.NotFound)
           .json({ success: false, error: "Post not found" });
       }
 
@@ -71,10 +72,14 @@ router.put(
         });
       }
 
-      res.status(400).json({ success: false, error: "No action performed" });
+      res
+        .status(codeError.BadRequest)
+        .json({ success: false, error: "No action performed" });
     } catch (error) {
       console.error("Error updating post:", error);
-      res.status(500).json({ success: false, error: "Internal Server Error" });
+      res
+        .status(codeError.InternalServerError)
+        .json({ success: false, error: "Internal Server Error" });
     }
   }
 );

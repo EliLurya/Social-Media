@@ -1,6 +1,7 @@
 import { OAuth2Client } from "google-auth-library";
 import { Request, Response, Router } from "express";
 import UserModel from "../../../models/userSchema";
+import { codeError } from "../../../utils/errorCodeServer/errorCodeServer";
 const jwt = require("jsonwebtoken");
 const body_parser = require("body-parser");
 const jsonParser = body_parser.json(); // Middleware for parsing JSON bodies
@@ -24,7 +25,7 @@ router.post(
       const payload = ticket.getPayload();
 
       if (!payload) {
-        return res.status(401).json({ error: "Invalid Google token" });
+        return res.status(codeError.Unauthorized).json({ error: "Invalid Google token" });
       }
 
       const { email, name } = payload;
@@ -66,7 +67,7 @@ router.post(
       });
     } catch (error) {
       console.error("Google sign-in error:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(codeError.InternalServerError).json({ error: "Internal Server Error" });
     }
   }
 );

@@ -6,6 +6,7 @@ const crypto = require("crypto");
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import { codeError } from "../../../utils/errorCodeServer/errorCodeServer";
 dotenv.config();
 const body_parser = require("body-parser");
 const jsonParser = body_parser.json();
@@ -34,7 +35,7 @@ router.post("/signup", jsonParser, async (req: Request, res: Response) => {
   } = req.body;
 
   if (!email || !password || !userName) {
-    res.status(400).json({
+    res.status(codeError.BadRequest).json({
       success: false,
       error: "You have to fill email, password, and name",
     });
@@ -44,14 +45,14 @@ router.post("/signup", jsonParser, async (req: Request, res: Response) => {
   //I do the validation in a password here and not in the Schema,
   //because i use with bcrypt before i send it to DB
   if (password.length < 8) {
-    res.status(400).json({
+    res.status(codeError.BadRequest).json({
       success: false,
       error: "Password must be at least 8 characters long",
     });
     return;
   }
   if (password.length > 30) {
-    res.status(400).json({
+    res.status(codeError.BadRequest).json({
       success: false,
       error: "Password must be a maximum of 30 characters long",
     });
@@ -62,7 +63,7 @@ router.post("/signup", jsonParser, async (req: Request, res: Response) => {
   const hasDigit = /\d/.test(password);
   const hasSpecialChar = /[!@#$%^&*()_+[\]{};':"\\|,.<>?]/.test(password);
   if (!(hasLowercase && hasUppercase && hasDigit && hasSpecialChar)) {
-    res.status(400).json({
+    res.status(codeError.BadRequest).json({
       success: false,
       error:
         "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character.",
@@ -88,7 +89,7 @@ router.post("/signup", jsonParser, async (req: Request, res: Response) => {
       } else {
         // User already exists with a regular sign-up
         res
-          .status(400)
+          .status(codeError.BadRequest)
           .json({ success: false, message: "Email already registered" });
         return;
       }
@@ -131,7 +132,7 @@ router.post("/signup", jsonParser, async (req: Request, res: Response) => {
         if (error) {
           console.error("Error sending verification email:", error);
           res
-            .status(500)
+            .status(codeError.InternalServerError)
             .json({ success: false, error: "Error sending email" });
         } else {
           console.log("Email sent: " + info.response);
@@ -149,7 +150,7 @@ router.post("/signup", jsonParser, async (req: Request, res: Response) => {
         tempUser.verificationCode !== userVerificationCode ||
         tempUser.verificationCodeExpiry < new Date()
       ) {
-        res.status(400).json({
+        res.status(codeError.Unauthorized).json({
           success: false,
           message: "Invalid or expired verification code",
         });
@@ -172,7 +173,9 @@ router.post("/signup", jsonParser, async (req: Request, res: Response) => {
     }
   } catch (error) {
     console.error("Error signing up:", error);
-    res.status(500).json({ success: false, error: "Internal Server Error" });
+    res
+      .status(codeError.InternalServerError)
+      .json({ success: false, error: "Internal Server Error" });
   }
 });
 export default router;

@@ -2,6 +2,7 @@ import express, { Request, Response, Router } from "express";
 import UserModel from "../../models/userSchema";
 import { User } from "../../types/userTypes";
 import { authentication } from "../../middleware/authMiddleware";
+import { codeError } from "../../utils/errorCodeServer/errorCodeServer";
 
 const body_parser = require("body-parser");
 const jsonParser = body_parser.json();
@@ -18,7 +19,9 @@ router.post(
     const { text, imageUrl } = req.body;    
     
     if (!text && !imageUrl) {
-      res.status(400).json({ success: false, error: "Send to the body post" });
+      res
+        .status(codeError.BadRequest)
+        .json({ success: false, error: "Send to the body post" });
       return;
     }
     try {
@@ -26,7 +29,7 @@ router.post(
       const user: User | null = await UserModel.findOne({ _id: userId });
       if (!user) {
         return res
-          .status(404)
+          .status(codeError.NotFound)
           .json({ success: false, error: "User not found" });
       }
 
@@ -55,7 +58,9 @@ router.post(
       });
     } catch (error) {
       console.error("Error creating post:", error);
-      res.status(500).json({ success: false, error: "Internal Server Error" });
+      res
+        .status(codeError.InternalServerError)
+        .json({ success: false, error: "Internal Server Error" });
     }
   }
 );

@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import UserModel from "../../models/userSchema";
 import { authentication } from "../../middleware/authMiddleware";
 import { User } from "../../types/userTypes";
+import { codeError } from "../../utils/errorCodeServer/errorCodeServer";
 const router = express.Router();
 
 type RouteHandler = (req: Request, res: Response) => Promise<void>;
@@ -19,7 +20,7 @@ router.get(
       });
     } catch (error) {
       console.error("Error fetching all users:", error);
-      res.status(500).json({ success: false, error: "Internal Server Error" });
+      res.status(codeError.InternalServerError).json({ success: false, error: "Internal Server Error" });
     }
   }
 );
@@ -33,13 +34,13 @@ router.get(
     try {
       const user: User | null = await UserModel.findById(id);
       if (!user) {
-        res.status(404).json({ success: false, error: "User not found" });
+        res.status(codeError.NotFound).json({ success: false, error: "User not found" });
         return;
       }
       res.json({ success: true, data: user });
     } catch (error) {
       console.error("Error fetching user:", error);
-      res.status(500).json({ success: false, error: "Internal Server Error" });
+      res.status(codeError.InternalServerError).json({ success: false, error: "Internal Server Error" });
     }
   }
 );

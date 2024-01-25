@@ -4,6 +4,7 @@ const body_parser = require("body-parser");
 const jsonParser = body_parser.json();
 import { authentication } from "../../../middleware/authMiddleware";
 import { deleteUserAndRelatedData } from "./deleteUserAndRelatedData";
+import { codeError } from "../../../utils/errorCodeServer/errorCodeServer";
 router.delete(
   "/deleteUser",
   jsonParser,
@@ -13,19 +14,21 @@ router.delete(
 
     if (!userId) {
       return res
-        .status(400)
+        .status(codeError.BadRequest)
         .json({ success: false, error: "User ID is required" });
     }
 
     try {
       await deleteUserAndRelatedData(userId);
-      res.status(200).json({
+      res.status(codeError.OK).json({
         success: true,
         message: "User and all related data successfully deleted",
       });
     } catch (error) {
       console.error("Error deleting user and related data:", error);
-      res.status(500).json({ success: false, error: "Internal Server Error" });
+      res
+        .status(codeError.InternalServerError)
+        .json({ success: false, error: "Internal Server Error" });
     }
   }
 );

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { JwtPayload } from "jsonwebtoken";
+import { codeError } from "../utils/errorCodeServer/errorCodeServer";
 
 // Middleware function for authentication
 export const authentication = (access: string) => {
@@ -9,7 +10,7 @@ export const authentication = (access: string) => {
     const token = req.cookies.token;
 
     if (!token) {
-      res.status(401).json({ success: false, error: "Missing token" });
+      res.status(codeError.Unauthorized).json({ success: false, error: "Missing token" });
       return;
     }
 
@@ -26,7 +27,7 @@ export const authentication = (access: string) => {
 
       // Check if the user's role has access to the specified resource
       if (access !== req.role.role) {
-        res.status(403).json({ success: false, error: "Forbidden" });
+        res.status(codeError.Forbidden).json({ success: false, error: "Forbidden" });
         return;
       }
 
@@ -34,7 +35,7 @@ export const authentication = (access: string) => {
       next();
     } catch (error) {
       // Handle invalid token or other errors
-      res.status(401).json({ success: false, error: "Invalid token" });
+      res.status(codeError.Unauthorized).json({ success: false, error: "Invalid token" });
     }
   };
   return validateToken;

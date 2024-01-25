@@ -3,6 +3,7 @@ import UserModel from "../../models/userSchema";
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import { codeError } from "../../utils/errorCodeServer/errorCodeServer";
 dotenv.config();
 const router = express.Router();
 // Node's built-in crypto module for generating random tokens
@@ -31,7 +32,7 @@ router.post(
     if (!email) {
       // Respond with an error if email is not provided
       return res
-        .status(400)
+        .status(codeError.BadRequest)
         .json({ success: false, error: "Email is required" });
     }
     try {
@@ -39,7 +40,7 @@ router.post(
       const user = await UserModel.findOne({ email });
       if (!user) {
         // Respond with a generic message to prevent email enumeration attacks
-        return res.status(200).json({
+        return res.status(codeError.OK).json({
           success: true,
           message:
             "If that email address is in our database, we will send you an email to reset your password",
@@ -69,10 +70,10 @@ router.post(
         if (error) {
           console.error("Send mail failed:", error);
           return res
-            .status(500)
+            .status(codeError.InternalServerError)
             .json({ success: false, error: "Error sending reset email" });
         }
-        res.status(200).json({
+        res.status(codeError.OK).json({
           success: true,
           message:
             "An email has been sent to " +
@@ -82,7 +83,9 @@ router.post(
       });
     } catch (error) {
       console.error("Password reset failed:", error);
-      res.status(500).json({ success: false, error: "Internal Server Error" });
+      res
+        .status(codeError.InternalServerError)
+        .json({ success: false, error: "Internal Server Error" });
     }
   }
 );
@@ -112,14 +115,14 @@ router.post("/reset-password", jsonParser, async (req, res) => {
       });
     } else {
       // Respond with error if the token is invalid or expired
-      res.status(400).json({
+      res.status(codeError.BadRequest).json({
         success: false,
         error: "Invalid or expired token",
       });
     }
   } catch (error) {
     console.error("Error resetting password:", error);
-    res.status(500).json({
+    res.status(codeError.InternalServerError).json({
       success: false,
       error: "Internal Server Error",
     });
@@ -147,7 +150,7 @@ router.get("/validate-reset-token/:token", async (req, res) => {
     }
     // If no user is found with the token, return an error
     if (!user) {
-      return res.status(400).json({
+      return res.status(codeError.BadRequest).json({
         success: false,
         error: "Reset token does not exist.",
       });
@@ -162,14 +165,14 @@ router.get("/validate-reset-token/:token", async (req, res) => {
         message: "Reset token is valid",
       });
     } else {
-      return res.status(400).json({
+      return res.status(codeError.BadRequest).json({
         success: false,
         error: "Reset token has expired",
       });
     }
   } catch (error) {
     console.error("Error validating reset token:", error);
-    res.status(500).json({
+    res.status(codeError.InternalServerError).json({
       success: false,
       error: "Internal Server Error",
     });
